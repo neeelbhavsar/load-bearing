@@ -1,0 +1,132 @@
+# Neel Bhavsar — Portfolio
+
+Dark editorial portfolio for a full-stack engineer, built as a single scroll-driven
+page plus a résumé route. Next.js 16 (App Router) · React 19 · TypeScript ·
+Tailwind v4 · Motion · Lenis · GSAP.
+
+```bash
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build
+npm run start   # serve the build
+npm run lint    # eslint (eslint-config-next)
+```
+
+No env vars or backing services are required to run it. `NEXT_PUBLIC_SITE_URL`
+is optional and only sets `metadataBase` for absolute OG/canonical URLs.
+
+## Routes
+
+| Route | What it is |
+| --- | --- |
+| `/` | The portfolio: nine sections, composed in [src/app/page.tsx](src/app/page.tsx) |
+| `/resume` | The CV as a real page, not a PDF download — [src/app/resume/page.tsx](src/app/resume/page.tsx). A print stylesheet in `globals.css` flattens it to ink-on-paper on Ctrl+P, so there's no separate file to keep in sync |
+
+## Where the content lives
+
+**All copy is in one file: [src/content/portfolio.ts](src/content/portfolio.ts).**
+No JSX, typed with `as const`. Components only read from it, so editing the site
+means editing exports here:
+
+| Export | Drives |
+| --- | --- |
+| `profile` | Name, role, tagline, location, availability, email, socials, portrait path, `resumeUrl` (points at `/resume`) |
+| `about` | Intro paragraphs + the stat row |
+| `experience` | The single-company timeline: role, period, summary, year-by-year highlights |
+| `projects` | Five case studies — blurb, role, year, stack, metrics, cover image, per-project accent, and a `detail` block for the modal |
+| `services` | Capability rows and their expanded detail |
+| `aiStack` | The AI tools actually in use, as bento cards |
+| `skills` | Grouped skill bands |
+| `testimonials` | Feedback wall. Entries flagged `draft: true` render **in development only** — unverified quotes can never reach production, and if nothing is publishable the section and its nav item both remove themselves (`hasVisibleTestimonials()`) |
+| `contact` | Intro, contact details, and the optional `formEndpoint` |
+| `resume` | Everything on `/resume` — summary, contact block, skill groups, experience bullets, projects, education, languages |
+| `navItems` | Nav order and anchors |
+
+Two knobs worth knowing:
+
+- `contact.formEndpoint` — empty by default, so the contact form composes a
+  `mailto:` draft to `profile.email` with no server involved. Set it to a
+  Formspree URL or your own route handler and the form POSTs JSON there instead.
+  See [contact-form.tsx](src/components/sections/contact-form.tsx).
+- `resume.contact.phone` — set to `""` to keep the number off the public page.
+
+Images: the portrait is local (`public/neel.png`); project covers are remote
+Unsplash URLs, allowed through the optimizer by the `remotePatterns` entry in
+[next.config.ts](next.config.ts). Swap in local files and that entry can go.
+
+## The motion, and where it lives
+
+| Section | Effect | File |
+| --- | --- | --- |
+| Hero | Split layout — type left, portrait right in a fixed 4:5 frame. Scroll-linked parallax and fade are **desktop-only**; on stacked mobile layouts they'd crawl the photo over the type | [sections/hero.tsx](src/components/sections/hero.tsx) |
+| About | Paragraphs light up word by word, scrubbed to scroll position | [sections/about.tsx](src/components/sections/about.tsx) |
+| Experience | Left column pins while the timeline scrolls; a spring-smoothed rail fills to show progress through the arc | [sections/experience.tsx](src/components/sections/experience.tsx) |
+| Work | The section is taller than the viewport by exactly the track's overflow; a sticky panel translates the card track on X from that scroll progress, so vertical scroll drives a horizontal gallery. Cards open a detail modal (scroll-locked) | [sections/projects.tsx](src/components/sections/projects.tsx) |
+| Services | Rows that expand into detail — hover/focus on pointer devices, tappable accordion on coarse pointers so every row is reachable | [sections/services.tsx](src/components/sections/services.tsx) |
+| AI layer | Bento cards that tilt toward the pointer with a per-card accent spotlight | [sections/ai-stack.tsx](src/components/sections/ai-stack.tsx) |
+| Skills | Oversized rows sliding against page scroll in alternating directions; hovering one dims its neighbours | [sections/skills.tsx](src/components/sections/skills.tsx) |
+| Feedback | Featured pull-quote leading a bento wall of voices | [sections/testimonials.tsx](src/components/sections/testimonials.tsx) |
+| Contact | Oversized watermark name rises as the footer arrives; click-to-copy email + the form | [sections/contact.tsx](src/components/sections/contact.tsx) |
+
+Global pieces:
+
+- [components/smooth-scroll.tsx](src/components/smooth-scroll.tsx) — Lenis
+  inertial scrolling. Every scroll-linked animation reads from the same rAF loop,
+  so nothing lags a frame behind the page. Disabled entirely under reduced motion.
+- [lib/scroll-lock.ts](src/lib/scroll-lock.ts) — Lenis drives `window.scrollTo`
+  itself, so `overflow: hidden` alone does **not** stop the page behind an
+  overlay. Anything modal calls `useScrollLock(open)`, which tells Lenis to stand
+  down (and falls back to locking `<html>` when there's no instance).
+- [components/cursor.tsx](src/components/cursor.tsx) — blend-mode cursor that
+  swells over elements marked `data-cursor="…"` and shows that label. Gated to
+  fine pointers with motion enabled.
+- [components/nav.tsx](src/components/nav.tsx) — spring pill on the active
+  section, scroll-progress rail, mobile sheet. Off the home page the anchors
+  become `/#section` links.
+- [components/motion-primitives.tsx](src/components/motion-primitives.tsx) —
+  `Reveal`, `RevealText`, `StaggerList`, `SectionLabel`. Shared entry animations
+  so sections don't each reinvent one.
+- [lib/use-media-query.ts](src/lib/use-media-query.ts) — returns `false` on the
+  server and first paint, then settles. Use it for animation ranges, never for
+  layout that must be correct in the SSR HTML.
+
+## Design tokens
+
+Declared once as Tailwind v4 `@theme` variables in
+[src/app/globals.css](src/app/globals.css): near-black canvas (`#06070a`),
+acid-lime accent (`--color-accent: #b4ff39`), cyan and violet as secondaries,
+Instrument Serif display / Inter body / JetBrains Mono labels (all `next/font`).
+Change the accent there and it propagates everywhere. Never hardcode a hex in a
+component — per-project and per-card accents are the one exception, and those
+come from `portfolio.ts`. A film-grain overlay and the print styles also live in
+`globals.css`.
+
+## Accessibility & motion
+
+- Reduced motion is honoured throughout: Lenis and the custom cursor don't
+  initialise, `motion-primitives` skips its transforms, and the hero renders
+  static.
+- Skip link, visible focus rings, aria-labelled icon buttons, semantic headings,
+  keyboard-reachable nav with `aria-current`, and a mobile menu that locks scroll.
+- Motion is transform / opacity / clip-path only — no animated `width`/`height` —
+  so scrolling never triggers layout.
+- Coarse-pointer paths exist wherever a hover-only interaction would otherwise
+  hide content (see Services).
+
+## Before you deploy
+
+Push and import into Vercel; nothing else is needed. Worth doing first:
+
+1. Set `NEXT_PUBLIC_SITE_URL` (or fix the fallback domain in
+   [layout.tsx](src/app/layout.tsx#L30)) so OG tags resolve absolutely.
+2. Add an OG image at `src/app/opengraph-image.png` — link previews currently
+   fall back to the portrait.
+3. Decide on `contact.formEndpoint`: leave it empty for the `mailto:` flow, or
+   point it at a form service to capture submissions.
+4. Publish or remove the `draft` testimonials — they are invisible in production
+   until you clear the flag.
+
+## Conventions
+
+`AGENTS.md` is generated by `next dev` and re-added on every run; commit it with
+your changes rather than fighting the diff.

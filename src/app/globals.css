@@ -1,0 +1,213 @@
+@import "tailwindcss";
+
+/* ─── Design tokens ─────────────────────────────────────────────
+   Dark editorial + acid accent. Semantic tokens only — never
+   hardcode a hex inside a component.
+   ───────────────────────────────────────────────────────────── */
+@theme {
+  --color-bg: #06070a;
+  --color-bg-elev: #0c0e13;
+  --color-surface: #11141b;
+  --color-fg: #f4f6fa;
+  --color-fg-muted: #9aa3b5;
+  --color-fg-faint: #5d6577;
+  --color-border: #1f242e;
+  --color-border-strong: #2c333f;
+  --color-accent: #b4ff39;
+  --color-accent-dim: #8fd11f;
+  --color-on-accent: #06070a;
+  --color-cyan: #5be9ff;
+  --color-violet: #c08bff;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), Georgia, serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    background-color: var(--color-bg);
+    color-scheme: dark;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    /* Lenis drives scrolling; native smooth-scroll would fight it */
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+/* ─── Lenis ─────────────────────────────────────────────────── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ─── Utilities ─────────────────────────────────────────────── */
+@utility text-balance-none {
+  text-wrap: initial;
+}
+
+/* Film grain overlay — sits above everything, ignores pointers */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 6s steps(6) infinite;
+}
+
+@keyframes grain-shift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-3%, 2%);
+  }
+  40% {
+    transform: translate(2%, -3%);
+  }
+  60% {
+    transform: translate(-2%, -2%);
+  }
+  80% {
+    transform: translate(3%, 1%);
+  }
+}
+
+/* Marquee track — CSS-driven so it stays off the main thread */
+@keyframes marquee-x {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.marquee-track {
+  animation: marquee-x var(--marquee-duration, 40s) linear infinite;
+  will-change: transform;
+}
+.marquee-reverse {
+  animation-direction: reverse;
+}
+.marquee-host:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Hairline gradient rule used between sections */
+.hairline {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-border-strong) 20%,
+    var(--color-border-strong) 80%,
+    transparent
+  );
+}
+
+/* ─── Print ──────────────────────────────────────────────────
+   The résumé lives at /resume as a page, not a PDF. If someone
+   prints it, flatten the dark theme to ink on paper and drop the
+   chrome — one source of truth, no exported file to keep in sync.
+   ───────────────────────────────────────────────────────────── */
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  /* fixed nav, custom cursor and grain have no meaning on paper */
+  body > header,
+  .grain::after,
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  main {
+    padding-top: 0 !important;
+  }
+
+  a {
+    color: #111 !important;
+    text-decoration: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  dt {
+    color: #111 !important;
+  }
+
+  p,
+  li,
+  dd,
+  span {
+    color: #333 !important;
+  }
+
+  section,
+  article {
+    break-inside: avoid;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .grain::after {
+    animation: none;
+  }
+  .marquee-track {
+    animation: none;
+  }
+}
