@@ -69,6 +69,12 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+  // Google Search Console ownership proof. A public identifier, not a secret —
+  // it only asserts that whoever controls this site also controls the Search
+  // Console property. Must be live before you press Verify, since Google
+  // fetches the deployed page. Leave it in place afterwards: removing it can
+  // un-verify the property.
+  verification: { google: "dGljOMTG_o7iFj2gJMQfh8Xzkk-2pc1HYRaTundNoO8" },
   category: "technology",
 };
 
