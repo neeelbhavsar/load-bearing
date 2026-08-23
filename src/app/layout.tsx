@@ -5,6 +5,7 @@ import { SmoothScroll } from "@/components/smooth-scroll";
 import { Cursor } from "@/components/cursor";
 import { Nav } from "@/components/nav";
 import { profile } from "@/content/portfolio";
+import { siteUrl } from "@/lib/site-url";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,8 +28,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  // TODO point at your real domain (or set NEXT_PUBLIC_SITE_URL at build time)
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://neelbhavsar.dev"),
+  metadataBase: new URL(siteUrl()),
   title: `${profile.name} — ${profile.role}`,
   description: profile.tagline,
   keywords: [
@@ -42,12 +42,15 @@ export const metadata: Metadata = {
     "Neo4j",
     profile.name,
   ],
+  alternates: { canonical: "/" },
   openGraph: {
     title: `${profile.name} — ${profile.role}`,
     description: profile.tagline,
     type: "website",
-    images: [{ url: profile.photo, width: 1200, height: 1600, alt: profile.name }],
+    // og:image comes from app/opengraph-image.tsx — the file convention wins
+    // over anything declared here, so don't also list one.
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {

@@ -113,18 +113,49 @@ come from `portfolio.ts`. A film-grain overlay and the print styles also live in
 - Coarse-pointer paths exist wherever a hover-only interaction would otherwise
   hide content (see Services).
 
-## Before you deploy
+## Deploying to Vercel
 
-Push and import into Vercel; nothing else is needed. Worth doing first:
+Push the repo and import it — Vercel detects Next.js and needs no build
+configuration, no `vercel.json`, and **no environment variables**. Every route
+prerenders as static content, so the whole site serves from the CDN:
 
-1. Set `NEXT_PUBLIC_SITE_URL` (or fix the fallback domain in
-   [layout.tsx](src/app/layout.tsx#L30)) so OG tags resolve absolutely.
-2. Add an OG image at `src/app/opengraph-image.png` — link previews currently
-   fall back to the portrait.
-3. Decide on `contact.formEndpoint`: leave it empty for the `mailto:` flow, or
-   point it at a form service to capture submissions.
-4. Publish or remove the `draft` testimonials — they are invisible in production
-   until you clear the flag.
+```
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /opengraph-image
+├ ○ /resume
+├ ○ /robots.txt
+└ ○ /sitemap.xml
+```
+
+Absolute URLs (OG tags, canonical, sitemap) resolve through
+[lib/site-url.ts](src/lib/site-url.ts), which reads, in order:
+
+1. `NEXT_PUBLIC_SITE_URL` — set this **only** once you have a custom domain
+2. `VERCEL_PROJECT_PRODUCTION_URL` — injected by Vercel; stable across production
+   deployments
+3. `VERCEL_URL` — injected per deployment, so previews link to themselves
+4. `http://localhost:3000` for local builds
+
+So a first deploy already emits correct absolute URLs on its `*.vercel.app` host.
+Point a domain at the project, then set `NEXT_PUBLIC_SITE_URL` to it.
+
+SEO and link previews are generated, not maintained by hand:
+[opengraph-image.tsx](src/app/opengraph-image.tsx) renders a 1200×630 card from
+`profile` at build time via `next/og`, and
+[sitemap.ts](src/app/sitemap.ts) / [robots.ts](src/app/robots.ts) use the App
+Router metadata conventions. Add a route ⇒ add a line to `sitemap.ts`.
+
+Still your call before going live:
+
+1. `contact.formEndpoint` — empty ships the `mailto:` flow. Point it at Formspree
+   or a route handler to capture submissions server-side.
+2. The `draft` testimonials are invisible in production until you clear the flag —
+   publish them or delete them.
+3. `resume.contact.phone` renders publicly on `/resume`. Set it to `""` to hide it.
+4. `Neel_Bhavsar_Fullstack.pdf` is gitignored on purpose — the source CV isn't
+   needed to build the site, and it carries a phone number.
 
 ## Conventions
 
