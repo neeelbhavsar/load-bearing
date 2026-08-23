@@ -10,7 +10,17 @@ export const profile = {
   name: "Neel Bhavsar",
   firstName: "Neel",
   lastName: "Bhavsar",
-  role: "Backend & MERN Engineer",
+  /**
+   * The visible job title — hero, <title>, h1. Kept to the position being
+   * targeted; MERN is a stack, not a title, so it earns its search visibility
+   * through the description and the JSON-LD in `seo` rather than by being
+   * bolted onto this line.
+   *
+   * Was "Backend & MERN Engineer", which contradicted the résumé's "Full Stack
+   * Developer" — two titles across one site split the signal and rank for
+   * neither.
+   */
+  role: "Full Stack Developer",
   tagline: "I build robust, scalable systems that quietly carry real products.",
   location: "Ahmedabad, India · Remote-friendly",
   availability: "Available for select work",
@@ -25,6 +35,72 @@ export const profile = {
     { label: "Email", href: "mailto:neelbhavsar124@gmail.com" },
   ],
   photo: "/neel.png",
+} as const;
+
+/**
+ * Search-facing copy. Deliberately separate from `profile.tagline`, which is
+ * written to sound good on the page — evocative lines make poor search results.
+ *
+ * `description` is what shows under your title in Google, so it names the role,
+ * the stack and the place: the words people actually type. Keep it ~150–160
+ * characters — longer gets truncated with an ellipsis.
+ */
+export const seo = {
+  // Both target phrases appear unhyphenated, in the order people type them:
+  // "full stack developer" and "MERN stack". Hyphenating "full-stack" is better
+  // prose but a worse match for the query.
+  description:
+    "Full stack developer in Ahmedabad with 5+ years building MERN stack products — React and Next.js front-ends on Node.js, Express and NestJS APIs.",
+  resumeDescription:
+    "Résumé of Neel Bhavsar, full stack developer in Ahmedabad — 5+ years on MERN stack products across streaming, EdTech, sports and rentals. React, Node.js, AWS.",
+  /**
+   * Google ignores the keywords meta tag entirely, so this exists for the
+   * JSON-LD `knowsAbout` field, which it does read. Keep it to things the page
+   * genuinely evidences — inflating it is how a profile stops being trusted.
+   */
+  knowsAbout: [
+    "Full-stack development",
+    "MERN stack",
+    "Node.js",
+    "Express.js",
+    "NestJS",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "REST API design",
+    "Microservices",
+    "WebSockets",
+    "MongoDB",
+    "PostgreSQL",
+    "Neo4j",
+    "Redis",
+    "AWS",
+    "Docker",
+    "Database performance tuning",
+  ],
+  /** The one visible title, matching `profile.role`. Used in <title> and OG. */
+  jobTitle: "Full Stack Developer",
+  /**
+   * Every position worth being found under. schema.org accepts repeated values
+   * for `jobTitle`, so the entity can legitimately hold all of these — this is
+   * where "MERN Stack Developer" earns its ranking, in machine-readable data a
+   * search engine reads as equivalent titles for one person.
+   *
+   * Invisible to visitors by design: the page shows one clean title, while the
+   * structured data covers the full set of queries. Keep every entry a title
+   * the experience on this page actually supports.
+   */
+  jobTitles: [
+    "Full Stack Developer",
+    "MERN Stack Developer",
+    "Full Stack MERN Developer",
+    "Node.js Developer",
+    "React Developer",
+    "Backend Developer",
+  ],
+  worksFor: { name: "Artoon Solutions Pvt. Ltd.", url: "https://artoonsolutions.com" },
+  alumniOf: { name: "Silver Oak University", url: "https://silveroakuni.ac.in" },
+  address: { city: "Ahmedabad", region: "Gujarat", country: "IN" },
 } as const;
 
 export const about = {

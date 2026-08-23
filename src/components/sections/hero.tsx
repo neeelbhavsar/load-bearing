@@ -74,6 +74,12 @@ export function Hero() {
             <span className="block text-[clamp(3rem,9vw,7.5rem)] text-fg-muted italic">
               <RevealText text={profile.lastName} delay={0.1} stagger={0.06} />
             </span>
+            {/* The role is shown visually in the line below, but it belongs in
+                the h1's text as well — the h1 is the page's strongest heading
+                signal and a bare name says nothing about what the page is for.
+                The h1's aria-label already covers this for screen readers, so
+                this span is not announced twice. */}
+            <span className="sr-only">{` — ${profile.role}`}</span>
           </h1>
 
           <motion.div

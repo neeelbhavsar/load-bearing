@@ -141,7 +141,67 @@ Absolute URLs (OG tags, canonical, sitemap) resolve through
 So a first deploy already emits correct absolute URLs on its `*.vercel.app` host.
 Point a domain at the project, then set `NEXT_PUBLIC_SITE_URL` to it.
 
-SEO and link previews are generated, not maintained by hand:
+## SEO
+
+Search copy is separated from page copy on purpose. `profile.tagline` is written
+to sound good in the hero; `seo.description` in
+[portfolio.ts](src/content/portfolio.ts) is written for the search result, so it
+names the role, the stack and the city — the words people actually type. Keep it
+under ~160 characters or Google truncates it.
+
+### Targeting two positions at once
+
+The site shows **one** visible title — "Full Stack Developer" (`profile.role`) —
+but ranks for **both** "full stack developer" and "MERN stack developer". Those
+goals only conflict if you try to solve them in the visible copy; a headline
+reading "Full Stack MERN Node React Developer" costs you the human reader and
+buys nothing, since Google stopped rewarding repetition long ago.
+
+So the second position is carried where machines read and people don't:
+
+| Layer | Carries |
+| --- | --- |
+| `profile.role` → `<title>`, `h1`, hero | "Full Stack Developer" only. One clean title |
+| `seo.description` → meta description | Both, in one natural sentence: *"Full stack developer … building MERN stack products"* |
+| `seo.jobTitles` → JSON-LD `Person.jobTitle` | All six titles. schema.org permits repeated values, so the entity legitimately claims every position it covers |
+| `seo.knowsAbout` → JSON-LD | "MERN stack", "Full-stack development", plus each individual technology |
+
+Two rules if you edit this. Keep both phrases **unhyphenated** in the
+description — "full-stack" is better prose but a worse match for what people
+type. And keep every entry in `jobTitles` a position this page's experience
+actually supports; the list is a claim about you, and inflating it is what turns
+structured data from an asset into a liability.
+
+### What's in place
+
+| Signal | Where |
+| --- | --- |
+| `title` template — sub-pages set a short title, the name is appended | [layout.tsx](src/app/layout.tsx) |
+| Canonical URLs on both routes | `alternates.canonical` per page |
+| `robots` / `googlebot` with `max-image-preview:large` and `max-snippet:-1` — without these Google may show a clipped snippet and a thumbnail | [layout.tsx](src/app/layout.tsx) |
+| Open Graph + `summary_large_image` Twitter card | [layout.tsx](src/app/layout.tsx), [resume/page.tsx](src/app/resume/page.tsx) |
+| Generated 1200×630 preview image | [opengraph-image.tsx](src/app/opengraph-image.tsx) |
+| `sitemap.xml`, `robots.txt` | [sitemap.ts](src/app/sitemap.ts), [robots.ts](src/app/robots.ts) |
+| JSON-LD entity graph | [lib/structured-data.ts](src/lib/structured-data.ts) |
+
+**Structured data is the part that matters most for a personal site.** Meta tags
+describe a document; schema.org describes *you* as an entity. Both routes emit a
+graph sharing one `Person` `@id`, so `/` and `/resume` describe the same person
+rather than two people with the same name, and `sameAs` points at your GitHub and
+LinkedIn so search engines merge those profiles with this one.
+
+Everything in the graph restates what is visible on the page. That's a hard rule:
+structured data claiming more than the page shows is how a site loses rich
+results. Validate changes with the
+[Rich Results Test](https://search.google.com/test/rich-results) and
+[Schema Markup Validator](https://validator.schema.org/).
+
+After deploying, the two things only you can do: verify the domain in
+[Google Search Console](https://search.google.com/search-console) and submit
+`/sitemap.xml`, and make sure your GitHub and LinkedIn profiles link *back* to
+the site — `sameAs` is a claim, and a reciprocal link is what confirms it.
+
+Other generated metadata:
 [opengraph-image.tsx](src/app/opengraph-image.tsx) renders a 1200×630 card from
 `profile` at build time via `next/og`, and
 [sitemap.ts](src/app/sitemap.ts) / [robots.ts](src/app/robots.ts) use the App

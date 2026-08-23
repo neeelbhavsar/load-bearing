@@ -2,11 +2,23 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
-import { profile, resume } from "@/content/portfolio";
+import { profile, resume, seo } from "@/content/portfolio";
+import { JsonLd } from "@/components/json-ld";
+import { resumeGraph } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: `${profile.name} — Résumé`,
-  description: resume.summary,
+  // The layout's title.template appends the site name, so this stays short.
+  title: "Résumé",
+  // resume.summary is a 90-word paragraph — far past what a search result shows.
+  // seo.resumeDescription is the trimmed version written for the SERP.
+  description: seo.resumeDescription,
+  alternates: { canonical: "/resume" },
+  openGraph: {
+    title: `${profile.name} — Résumé`,
+    description: seo.resumeDescription,
+    url: "/resume",
+    type: "profile",
+  },
 };
 
 /**
@@ -22,6 +34,7 @@ export default function ResumePage() {
 
   return (
     <div className="mx-auto max-w-[1100px] px-5 pt-24 pb-20 sm:px-8 sm:pt-32 sm:pb-28">
+      <JsonLd data={resumeGraph()} />
       <Link
         href="/"
         data-cursor="back"

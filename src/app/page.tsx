@@ -7,10 +7,13 @@ import { AiStack } from "@/components/sections/ai-stack";
 import { Skills } from "@/components/sections/skills";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Contact } from "@/components/sections/contact";
+import { JsonLd } from "@/components/json-ld";
+import { homeGraph } from "@/lib/structured-data";
 
 export default function Home() {
   return (
     <>
+      <JsonLd data={homeGraph()} />
       <Hero />
       <About />
       <Experience />
