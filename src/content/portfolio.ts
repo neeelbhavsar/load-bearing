@@ -23,7 +23,7 @@ export const profile = {
   role: "Full Stack Developer",
   tagline: "I build robust, scalable systems that quietly carry real products.",
   location: "Ahmedabad, India · Remote-friendly",
-  availability: "Available for select work",
+  availability: "Available for Selected Work",
   yearsExperience: "5+",
   company: "Artoon Solutions Pvt. Ltd.",
   email: "neelbhavsar124@gmail.com",
@@ -585,6 +585,12 @@ export const aiStack = {
       accent: "#C08BFF",
       desc: "Inline completion in the editor — boilerplate, tests and repetitive refactors, without leaving the file.",
     },
+    {
+      name: "Codex",
+      role: "agentic tasks",
+      accent: "#B4FF39",
+      desc: "Delegating scoped, well-defined work — migrations, refactors across many files, and test coverage — then reviewing the diff.",
+    },
   ],
 } as const;
 
@@ -749,7 +755,7 @@ export const contact = {
     { label: "Email", value: "neelbhavsar124@gmail.com" },
     { label: "Based in", value: "Ahmedabad, India · Remote-friendly" },
     { label: "Response time", value: "Within 24 hours" },
-    { label: "Currently", value: "Available for select work" },
+    { label: "Currently", value: "Available for Selected Work" },
   ],
 } as const;
 

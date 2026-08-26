@@ -33,7 +33,18 @@ export function AiStack() {
 
           <div className="grid gap-5 sm:grid-cols-2">
             {aiStack.tools.map((tool, i) => (
-              <Reveal key={tool.name} delay={i * 0.08}>
+              <Reveal
+                key={tool.name}
+                delay={i * 0.08}
+                /* Two columns means an odd number of tools leaves the last card
+                   with a hole beside it. Run the final one full width instead,
+                   so the grid closes cleanly at any count. */
+                className={
+                  aiStack.tools.length % 2 === 1 && i === aiStack.tools.length - 1
+                    ? "sm:col-span-2"
+                    : undefined
+                }
+              >
                 <TiltCard accent={tool.accent}>
                   <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                     <h3

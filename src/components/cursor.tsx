@@ -45,11 +45,14 @@ export function Cursor() {
     >
       <motion.div
         className="flex items-center justify-center rounded-full bg-white font-mono text-[10px] font-medium tracking-widest text-black uppercase"
+        /* The x/y offsets are always half the matching size — that is what
+           centres the circle on the real pointer position. Change a size and
+           its offset has to move with it, or the cursor sits off-centre. */
         animate={{
-          width: active ? (label ? 92 : 52) : 12,
-          height: active ? (label ? 92 : 52) : 12,
-          x: active ? (label ? -46 : -26) : -6,
-          y: active ? (label ? -46 : -26) : -6,
+          width: active ? (label ? 92 : 52) : 14,
+          height: active ? (label ? 92 : 52) : 14,
+          x: active ? (label ? -46 : -26) : -7,
+          y: active ? (label ? -46 : -26) : -7,
         }}
         transition={{ type: "spring", stiffness: 380, damping: 30 }}
       >
