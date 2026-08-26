@@ -884,6 +884,15 @@ export const resume = {
         "Architected a CMS-driven platform across 3 educational institutions; designed an automated mentor–mentee matching algorithm improving satisfaction scores by 35%.",
       ],
     },
+    {
+      name: "Diamond Connect",
+      kind: "Sports Tournament Platform",
+      period: "2021 — 2023",
+      bullets: [
+        "Built the backend for a cross-platform youth baseball tournament system — MongoDB schema, Express REST API, and a scheduling engine generating brackets and game slots from team counts, field availability and rest windows.",
+        "Integrated Stripe for registration fees with idempotent, webhook-confirmed enrolment so retried events never double-register a team; built the event-management and CMS layer serving a single API to every client platform.",
+      ],
+    },
   ],
   education: [
     {
