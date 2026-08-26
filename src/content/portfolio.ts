@@ -649,7 +649,7 @@ export const testimonials = {
   heading: "Feedback",
   title: "What they said",
   intro:
-    "A client I worked for on contract, and the team leader I report to at Artoon — on what it was actually like.",
+    "A client I worked for on contract, and the team leader and project manager I work with at Artoon — on what it was actually like.",
   items: [
     /**
      * Real, published. The pull-quote is the closing line of the feedback; the
@@ -695,6 +695,30 @@ export const testimonials = {
       company: "Artoon Solutions",
       relation: "Team Leader",
       accent: "#5BE9FF",
+      featured: true,
+      draft: false,
+    },
+    /**
+     * Real, published. Verbatim and complete — the pull-quote is the opening
+     * sentence and the paragraphs below carry the rest in the original order,
+     * so the full text appears exactly once with nothing paraphrased.
+     *
+     * `featured` because only featured entries render `body`; as a wall card
+     * everything after the first sentence would be dropped.
+     */
+    {
+      quote:
+        "Neel is one of the most dependable and technically strong engineers I have had the opportunity to work with.",
+      body: [
+        "What I appreciate most about him is the way he thinks. He never simply starts coding. He takes the time to understand the requirements, thinks through possible edge cases, and then delivers a solid, practical solution.",
+        "He has strong expertise in backend architecture, Node.js, TypeScript, AWS, databases, APIs, and third-party integrations. What truly stands out is his willingness to learn and take ownership. He is always ready to help the team, share his knowledge, and take responsibility when needed. His dedication, problem-solving approach, and commitment to delivering quality work make him a very valuable part of any engineering team.",
+      ],
+      name: "Pankaj Dhameliya",
+      role: "Project Manager",
+      company: "Artoon Solutions",
+      relation: "Project Manager",
+      projects: ["Braganza", "Streamerdap"],
+      accent: "#C08BFF",
       featured: true,
       draft: false,
     },
