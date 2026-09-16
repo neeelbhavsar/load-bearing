@@ -77,6 +77,14 @@ export const seo = {
     "AWS",
     "Docker",
     "Database performance tuning",
+    // Added once the case studies made these demonstrable on the site itself:
+    // Streamerdap (live streaming, PayPal payouts), Braganza (Redis-cached
+    // availability, Stripe) and SpingR (graph modelling) each evidence one.
+    // The rule holds — nothing here that a page does not show.
+    "Real-time systems",
+    "Live video streaming",
+    "Payment integration (Stripe, PayPal)",
+    "Graph data modeling",
   ],
   /** The one visible title, matching `profile.role`. Used in <title> and OG. */
   jobTitle: "Full Stack Developer",
@@ -110,11 +118,17 @@ export const about = {
     "MERN-stack engineer with 5+ years building full-stack web applications: React front-ends, robust RESTful APIs, secure auth flows, and databases tuned for performance and reliability. I work across relational, document and graph stores — MongoDB, MySQL, PostgreSQL, Neo4j and Redis — with a focus on efficient data modeling in polyglot architectures.",
     "My work is about turning requirements into systems that hold up: clean architecture, predictable contracts, indexes and caches that actually pay off. No compromise on the boring parts, because those are the parts that page you at 2am.",
   ],
+  /**
+   * Outcomes, not inventory. "5 databases" and "20+ tools" counted what was
+   * touched, which every CV claims; these are measured results, and each one is
+   * the same figure the résumé bullets carry — so the homepage and /resume
+   * corroborate each other instead of a visitor having to dig for the proof.
+   */
   stats: [
+    { value: "70%", label: "Faster API responses" },
+    { value: "50k+", label: "Users served" },
+    { value: "$50k", label: "Monthly payments processed" },
     { value: "5+", label: "Years in production" },
-    { value: "7", label: "Projects delivered" },
-    { value: "5", label: "Databases in prod" },
-    { value: "20+", label: "Tools & technologies" },
   ],
 } as const;
 
@@ -155,7 +169,9 @@ export const services = {
 export const experience = {
   company: "Artoon Solutions",
   companyUrl: "https://artoonsolutions.com",
-  role: "Senior Backend Developer",
+  // Must match resume.experience[0].role — same company with two different
+  // titles across two pages is the kind of thing a recruiter reads as careless.
+  role: "Full Stack Developer",
   period: "2021 — Present",
   location: "Surat, India · On-site",
   summary:
@@ -175,7 +191,9 @@ export const experience = {
     },
     {
       year: "2026",
-      title: "Senior Backend Developer",
+      // The current milestone, so it has to carry the current title too —
+      // otherwise the timeline reintroduces the contradiction the header fixes.
+      title: "Full Stack Developer",
       body: "Owning architecture for high-scale platforms — Braganza end to end, from an Express and PostgreSQL core with Redis caching on AWS through to the React and Next.js booking interface — and setting the API and data-modeling standards the team builds against.",
       tags: ["Node.js", "Express", "React", "Next.js", "TypeScript", "PostgreSQL", "Redis", "AWS"],
     },
@@ -267,7 +285,7 @@ export const projects: readonly Project[] = [
     role: "Full stack",
     year: "2026",
     stack: ["Node.js", "Express", "React", "Next.js", "TypeScript", "PostgreSQL", "Redis", "AWS"],
-    metric: "Redis-cached availability",
+    metric: "200+ vehicles · 40% fewer support tickets",
     image:
       "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1600&auto=format&fit=crop",
     href: "https://www.braganzaclub.com",
@@ -318,7 +336,7 @@ export const projects: readonly Project[] = [
     role: "Backend lead",
     year: "2025",
     stack: ["Node.js", "MySQL", "Sequelize", "PayPal API", "OBS"],
-    metric: "Stream direct from OBS",
+    metric: "500+ concurrent streamers · 5,000+ weekly payouts",
     image:
       "https://images.unsplash.com/photo-1598550476439-6847785fcea6?q=80&w=1600&auto=format&fit=crop",
     href: "https://www.streamerdap.com",
@@ -415,7 +433,7 @@ export const projects: readonly Project[] = [
     role: "Backend lead",
     year: "2024",
     stack: ["Node.js", "Neo4j", "MongoDB", "WebSockets", "JWT"],
-    metric: "Graph-modeled networking",
+    metric: "10,000+ professionals · sub-200ms across 100k+ nodes",
     image:
       "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=1600&auto=format&fit=crop",
     linkNote: "Shipped as a mobile application — no public web URL",
@@ -461,7 +479,7 @@ export const projects: readonly Project[] = [
     role: "Full stack",
     year: "2023",
     stack: ["Node.js", "Express", "React", "Next.js", "MongoDB", "CMS", "Socket.io"],
-    metric: "Matching, no spreadsheets",
+    metric: "3 institutions · 35% higher satisfaction",
     image:
       "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop",
     href: "https://pilot.imentor.org",
@@ -754,6 +772,13 @@ export const contact = {
   details: [
     { label: "Email", value: "neelbhavsar124@gmail.com" },
     { label: "Based in", value: "Ahmedabad, India · Remote-friendly" },
+    /**
+     * International clients screen on overlap before they screen on skills, so
+     * "Remote-friendly" alone loses them. The timezone is fact; the hours are a
+     * commitment only you can make.
+     * TODO confirm the window you actually want to promise, then delete this note.
+     */
+    { label: "Timezone", value: "IST (UTC+5:30) · 4+ hrs overlap with EU, mornings with US" },
     { label: "Response time", value: "Within 24 hours" },
     { label: "Currently", value: "Available for Selected Work" },
   ],

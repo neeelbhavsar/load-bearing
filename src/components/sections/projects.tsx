@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   AnimatePresence,
   motion,
@@ -336,17 +337,23 @@ function GalleryCard({
           <span className="min-w-0 truncate font-mono text-[10px] tracking-[0.16em] text-fg-faint uppercase">
             {project.role}
           </span>
-          {/* The whole card is clickable for pointers; this is the keyboard
-              target and the visible affordance. --acc is the card's accent. */}
-          <button
-            type="button"
-            onClick={() => onOpen(project)}
-            aria-label={`Open case study — ${project.title}`}
+          {/* A real link, not a button: the card body opens the modal for a
+              quick look, but this has to be an <a> in the server-rendered HTML
+              or the case-study pages are orphans — the modal never reaches a
+              crawler, so nothing on the site would point at them. It also gets
+              middle-click and open-in-new-tab for free.
+
+              stopPropagation so following the link doesn't also fire the card's
+              modal handler underneath it. */}
+          <Link
+            href={`/work/${project.slug}`}
+            onClick={(e) => e.stopPropagation()}
+            aria-label={`Case study — ${project.title}`}
             className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border-strong px-3.5 py-2.5 font-mono text-[10px] tracking-[0.16em] uppercase transition-colors duration-300 group-hover:border-transparent group-hover:bg-[var(--acc)] group-hover:text-on-accent sm:gap-2 sm:px-4 sm:tracking-[0.18em]"
           >
             Case study
             <ArrowUpRight size={13} aria-hidden />
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -620,6 +627,16 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
                       {project.linkNote}
                     </span>
                   )}
+                  {/* The modal is the quick look; the route is the shareable,
+                      indexable version of the same content. Without this link
+                      the case-study pages exist but nothing points at them. */}
+                  <Link
+                    href={`/work/${project.slug}`}
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-border-strong px-6 py-4 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent sm:py-3.5"
+                  >
+                    Full case study
+                    <ArrowUpRight size={14} aria-hidden />
+                  </Link>
                   <a
                     href="#contact"
                     onClick={onClose}

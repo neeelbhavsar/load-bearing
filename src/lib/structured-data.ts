@@ -1,4 +1,4 @@
-import { profile, seo, resume, skills } from "@/content/portfolio";
+import { profile, seo, resume, skills, projects, type Project } from "@/content/portfolio";
 import { siteUrl } from "@/lib/site-url";
 
 /**
@@ -99,6 +99,15 @@ export function homeGraph() {
         // The page is *about* the person — this is the link that makes a
         // ProfilePage meaningful rather than just another WebPage.
         mainEntity: { "@id": id.person },
+        // The work, in the order the page shows it. This is what ties the home
+        // page to the seven case studies in structured data rather than leaving
+        // them to be discovered only through the sitemap.
+        hasPart: projects.map((project) => ({
+          "@type": "CreativeWork",
+          "@id": `${base}/work/${project.slug}#work`,
+          name: project.title,
+          url: `${base}/work/${project.slug}`,
+        })),
       },
     ],
   };
@@ -133,6 +142,67 @@ export function resumeGraph() {
           occupationLocation: { "@type": "Place", name: job.location },
         })),
         skills: skills.flatMap((group) => group.items).join(", "),
+      },
+    ],
+  };
+}
+
+/**
+ * A case study page. The project is a CreativeWork the same Person authored, so
+ * these pages feed the one entity rather than floating free — seven more pages
+ * all pointing at the same @id is a stronger signal than seven unrelated ones.
+ *
+ * `about` carries the stack as plain keywords, which is what makes a long-tail
+ * query like "Neo4j graph relationship discovery Node" reachable at all.
+ */
+export function projectGraph(project: Project) {
+  const base = siteUrl();
+  const id = ids(base);
+  const url = `${base}/work/${project.slug}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        url,
+        name: `${project.title} — ${project.detail.kicker}`,
+        description: project.blurb,
+        isPartOf: { "@id": id.website },
+        breadcrumb: { "@id": `${url}#breadcrumb` },
+      },
+      /**
+       * Breadcrumbs change what the search result itself looks like: Google
+       * renders the trail in place of the bare URL, so the listing reads
+       * "Neel Bhavsar › Work › Braganza" instead of a path. Cheap, and it is
+       * one of the few schema types with a visible effect on the SERP.
+       */
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: profile.name, item: base },
+          { "@type": "ListItem", position: 2, name: "Work", item: `${base}/#work` },
+          // The last crumb is the current page, so it carries no `item` — that
+          // is the convention, and adding one makes it self-referential.
+          { "@type": "ListItem", position: 3, name: project.title },
+        ],
+      },
+      {
+        "@type": "CreativeWork",
+        "@id": `${url}#work`,
+        name: project.title,
+        headline: project.detail.kicker,
+        description: project.blurb,
+        url,
+        image: project.image,
+        // The year is a plain string like "2026" or "2021 — 2023"; only emit a
+        // machine date when it is unambiguously a single year.
+        ...(/^\d{4}$/.test(project.year) ? { dateCreated: project.year } : {}),
+        author: { "@id": id.person },
+        creator: { "@id": id.person },
+        keywords: project.stack.join(", "),
+        ...(project.href ? { sameAs: project.href } : {}),
       },
     ],
   };
