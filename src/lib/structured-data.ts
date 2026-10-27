@@ -92,6 +92,7 @@ export function homeGraph() {
       },
       {
         "@type": "ProfilePage",
+        "@id": `${base}/#page`,
         url: base,
         name: `${profile.name} — ${seo.jobTitle}`,
         description: seo.description,
@@ -122,20 +123,33 @@ export function resumeGraph() {
   const base = siteUrl();
   const id = ids(base);
 
+  const url = `${base}/resume`;
+
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "WebPage",
-        url: `${base}/resume`,
+        "@type": "ProfilePage",
+        "@id": `${url}#page`,
+        url,
         name: `${profile.name} — Résumé`,
         description: seo.resumeDescription,
         isPartOf: { "@id": id.website },
         mainEntity: { "@id": id.person },
+        breadcrumb: { "@id": `${url}#breadcrumb` },
       },
       {
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: profile.name, item: base },
+          { "@type": "ListItem", position: 2, name: "Résumé" },
+        ],
+      },
+      {
+        // Same node as the home page, url included — overriding `url` here
+        // gave one @id two different addresses.
         ...personNode(base),
-        url: `${base}/resume`,
         hasOccupation: resume.experience.map((job) => ({
           "@type": "Occupation",
           name: job.role,
@@ -174,18 +188,19 @@ export function projectGraph(project: Project) {
       /**
        * Breadcrumbs change what the search result itself looks like: Google
        * renders the trail in place of the bare URL, so the listing reads
-       * "Neel Bhavsar › Work › Braganza" instead of a path. Cheap, and it is
+       * "Neel Bhavsar › Braganza" instead of a path. Cheap, and it is
        * one of the few schema types with a visible effect on the SERP.
        */
       {
         "@type": "BreadcrumbList",
         "@id": `${url}#breadcrumb`,
         itemListElement: [
+          // No "Work" crumb: there is no /work page, and a crumb pointing at
+          // the /#work fragment is just the home page again.
           { "@type": "ListItem", position: 1, name: profile.name, item: base },
-          { "@type": "ListItem", position: 2, name: "Work", item: `${base}/#work` },
           // The last crumb is the current page, so it carries no `item` — that
           // is the convention, and adding one makes it self-referential.
-          { "@type": "ListItem", position: 3, name: project.title },
+          { "@type": "ListItem", position: 2, name: project.title },
         ],
       },
       {
@@ -195,7 +210,9 @@ export function projectGraph(project: Project) {
         headline: project.detail.kicker,
         description: project.blurb,
         url,
-        image: project.image,
+        // The generated share card, not project.image — that is Unsplash stock,
+        // and schema shouldn't present a stock photo as the work itself.
+        image: `${url}/opengraph-image`,
         // The year is a plain string like "2026" or "2021 — 2023"; only emit a
         // machine date when it is unambiguously a single year.
         ...(/^\d{4}$/.test(project.year) ? { dateCreated: project.year } : {}),

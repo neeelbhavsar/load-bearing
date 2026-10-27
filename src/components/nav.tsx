@@ -119,8 +119,11 @@ export function Nav() {
           </nav>
 
           <div className="flex items-center gap-3">
+            {/* The contact section, not a mailto: a mailto with no registered
+                handler does nothing at all, and the section has the form, the
+                address and a copy button. */}
             <a
-              href={`mailto:${profile.email}`}
+              href={linkFor("#contact")}
               data-cursor="say hi"
               className="hidden rounded-full border border-border-strong px-4 py-2 font-mono text-xs tracking-wide uppercase transition-colors duration-200 hover:border-accent hover:text-accent sm:block"
             >

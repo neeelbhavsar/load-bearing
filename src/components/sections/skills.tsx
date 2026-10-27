@@ -14,7 +14,9 @@ export function Skills() {
   return (
     <section id="skills" className="relative overflow-hidden border-t border-border py-20 sm:py-36">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-        <SectionLabel index="06">Skills</SectionLabel>
+        <SectionLabel index="06" heading>
+          Skills
+        </SectionLabel>
       </div>
 
       <div className="mt-14 flex flex-col gap-10 sm:gap-14">

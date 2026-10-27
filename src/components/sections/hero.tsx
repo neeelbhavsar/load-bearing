@@ -53,8 +53,8 @@ export function Hero() {
         <motion.div style={parallax ? { y: typeY } : undefined} className="order-2 lg:order-1">
           <motion.p
             className="flex items-center gap-3 font-mono text-[11px] tracking-[0.24em] text-fg-faint uppercase"
-            initial={reduced ? undefined : { opacity: 0, y: 10 }}
-            animate={reduced ? undefined : { opacity: 1, y: 0 }}
+            initial={reduced ? undefined : { y: 10 }}
+            animate={reduced ? undefined : { y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             <span className="relative flex h-1.5 w-1.5">
@@ -83,8 +83,8 @@ export function Hero() {
           </h1>
 
           <motion.div
-            initial={reduced ? undefined : { opacity: 0, y: 16 }}
-            animate={reduced ? undefined : { opacity: 1, y: 0 }}
+            initial={reduced ? undefined : { y: 16 }}
+            animate={reduced ? undefined : { y: 0 }}
             transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] tracking-[0.16em] uppercase sm:mt-7 sm:text-xs sm:tracking-[0.2em]">
@@ -149,8 +149,11 @@ export function Hero() {
         <motion.div
           className="order-1 mx-auto w-full max-w-[248px] sm:max-w-[340px] lg:order-2 lg:mx-0 lg:max-w-none"
           style={parallax ? { y: photoY } : undefined}
-          initial={reduced ? undefined : { opacity: 0, scale: 0.96 }}
-          animate={reduced ? undefined : { opacity: 1, scale: 1 }}
+          // Transform only, no opacity: the server HTML ships whatever `initial`
+          // says, and an opacity-0 portrait can't be painted as the LCP element
+          // until hydration plus the full fade. A settle-in scale reads the same.
+          initial={reduced ? undefined : { scale: 0.96 }}
+          animate={reduced ? undefined : { scale: 1 }}
           transition={{ duration: 1, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
         >
           <div

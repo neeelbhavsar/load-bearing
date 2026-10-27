@@ -34,7 +34,7 @@ export const profile = {
     { label: "LinkedIn", href: "https://linkedin.com/in/neeelbhavsar" },
     { label: "Email", href: "mailto:neelbhavsar124@gmail.com" },
   ],
-  photo: "/neel.png",
+  photo: "/neel.jpg",
 } as const;
 
 /**
@@ -173,7 +173,7 @@ export const experience = {
   // titles across two pages is the kind of thing a recruiter reads as careless.
   role: "Full Stack Developer",
   period: "2021 — Present",
-  location: "Surat, India · On-site",
+  location: "Ahmedabad, India · On-site",
   summary:
     "Joined as a Node.js developer building event-management systems and grew into owning backend architecture — API contracts, polyglot data modeling, real-time pipelines, and production on AWS.",
   highlights: [
@@ -204,6 +204,11 @@ export type Project = {
   slug: string;
   title: string;
   blurb: string;
+  /**
+   * Hand-written search description, ≤ 155 characters. Only needed where the
+   * blurb is too long to fit a result; otherwise the blurb is used as is.
+   */
+  seoDescription?: string;
   role: string;
   year: string;
   stack: readonly string[];
@@ -233,6 +238,8 @@ export const projects: readonly Project[] = [
   {
     slug: "ai-library",
     title: "AI Library",
+    seoDescription:
+      "A self-updating directory of AI Skills, MCP servers and GitHub repos, with copy-paste setup for Claude, Cursor, Codex and more, refreshed daily by a cron.",
     blurb:
       "An auto-updating directory of AI Skills, MCP servers and GitHub repos, with copy-paste setup instructions generated for Claude, Cursor, Codex, Windsurf, Cline and VS Code. A daily GitHub Actions cron refreshes the catalogue — no database, no server to babysit.",
     role: "Creator · full stack",
@@ -280,6 +287,8 @@ export const projects: readonly Project[] = [
   {
     slug: "braganza",
     title: "Braganza",
+    seoDescription:
+      "A full-stack car rental platform: discover, book and rent vehicles, with availability, pricing and fleet state kept consistent under load.",
     blurb:
       "A full-stack car rental platform where users discover, book and rent vehicles through a secure, scalable system — availability, pricing and fleet state all consistent under load.",
     role: "Full stack",
@@ -351,6 +360,7 @@ export const projects: readonly Project[] = [
         "Led the backend — MySQL schema via Sequelize, REST API and the PayPal integration.",
         "Built the OBS-facing token flow so a browser source authenticates without a login screen inside OBS.",
         "Implemented subscription lifecycle handling: checkout, renewal, cancellation and plan-based feature gating.",
+        "Built the PayPal payout system, processing 5,000+ weekly payouts to creators at 99.5% accuracy.",
         "Modelled creators, channels, plans and entitlements so a feature check is one query, not a chain of them.",
       ],
       challenges: [
@@ -474,6 +484,8 @@ export const projects: readonly Project[] = [
   {
     slug: "imentor",
     title: "iMentor",
+    seoDescription:
+      "A CMS-driven education platform with multi-role admin, automated mentor–mentee matching and built-in chat, so pairs never leave the programme.",
     blurb:
       "A CMS-driven educational platform with multi-role admin support, automated mentor–mentee matching and built-in chat, so a pair can talk without leaving the programme.",
     role: "Full stack",
@@ -772,13 +784,8 @@ export const contact = {
   details: [
     { label: "Email", value: "neelbhavsar124@gmail.com" },
     { label: "Based in", value: "Ahmedabad, India · Remote-friendly" },
-    /**
-     * International clients screen on overlap before they screen on skills, so
-     * "Remote-friendly" alone loses them. The timezone is fact; the hours are a
-     * commitment only you can make.
-     * TODO confirm the window you actually want to promise, then delete this note.
-     */
-    { label: "Timezone", value: "IST (UTC+5:30) · 4+ hrs overlap with EU, mornings with US" },
+    // Timezone only — no promised overlap windows with other regions.
+    { label: "Timezone", value: "IST (UTC+5:30)" },
     { label: "Response time", value: "Within 24 hours" },
     { label: "Currently", value: "Available for Selected Work" },
   ],
@@ -860,7 +867,7 @@ export const resume = {
       period: "Apr 2021 — Present",
       location: "India",
       bullets: [
-        "Architected and delivered 6 production web applications end-to-end using the MERN stack, serving 50,000+ active users across multiple platforms.",
+        "Architected and delivered 6 production web applications end-to-end on Node.js and React, with MongoDB, PostgreSQL, MySQL or Neo4j as each product needed, serving 50,000+ active users across multiple platforms.",
         "Built responsive, component-driven frontends with React, Next.js, and TypeScript, converting Figma designs into pixel-accurate, reusable UI components styled with Tailwind CSS and Material UI.",
         "Reduced API response times by 70% via strategic database indexing, Redis caching, and background job processing, achieving P95 latency under 250 ms.",
         "Improved application throughput by 80% through code refactoring and N+1 query elimination, enabling 3x traffic without added infrastructure cost.",
@@ -878,7 +885,7 @@ export const resume = {
       kind: "Car Rental Platform",
       period: "Jan 2026 — Present",
       bullets: [
-        "Built end-to-end on the MERN stack, developing both the React frontend and Node.js/Express backend for a marketplace managing 200+ vehicles.",
+        "Built end-to-end on Node.js, Express and PostgreSQL with a React and Next.js frontend, for a marketplace managing 200+ vehicles.",
         "Developed responsive UI from Figma designs; booking interface reduced customer support tickets by 40%. Integrated Booqable and real-time WebSocket booking updates.",
       ],
     },

@@ -25,6 +25,9 @@ const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
+  // Only small labels use it. Preloading put a fourth font file ahead of the
+  // hero portrait on the critical path; swap covers the brief fallback.
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -41,7 +44,9 @@ export const metadata: Metadata = {
   applicationName: profile.name,
   authors: [{ name: profile.name, url: siteUrl() }],
   creator: profile.name,
-  alternates: { canonical: "/" },
+  // No canonical here: a layout canonical is inherited by every page that
+  // doesn't set its own — the 404 included, which then claimed to be "/".
+  // Each page declares its own.
   openGraph: {
     title: `${profile.name} — ${seo.jobTitle}`,
     description: seo.description,

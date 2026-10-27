@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
-import { profile, resume, seo } from "@/content/portfolio";
+import { profile, projects, resume, seo } from "@/content/portfolio";
 import { JsonLd } from "@/components/json-ld";
 import { resumeGraph } from "@/lib/structured-data";
 
@@ -18,6 +18,15 @@ export const metadata: Metadata = {
     description: seo.resumeDescription,
     url: "/resume",
     type: "profile",
+    // Declaring openGraph here replaces the inherited object wholesale, the
+    // root share card included, so it has to be listed again.
+    images: ["/opengraph-image"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${profile.name} — Résumé`,
+    description: seo.resumeDescription,
+    images: ["/opengraph-image"],
   },
 };
 
@@ -139,11 +148,24 @@ export default function ResumePage() {
           </Section>
 
           <Section label="Selected projects">
-            {resume.projects.map((project) => (
+            {resume.projects.map((project) => {
+              // Résumé names can be longer than the case-study title
+              // ("Braganza Auto Collezione"), so match on the prefix.
+              const caseStudy = projects.find((p) => project.name.startsWith(p.title));
+              return (
               <article key={project.name} className="mb-8 last:mb-0">
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                   <h3 className="font-display text-xl tracking-tight sm:text-2xl">
-                    {project.name}
+                    {caseStudy ? (
+                      <Link
+                        href={`/work/${caseStudy.slug}`}
+                        className="underline decoration-border-strong underline-offset-4 transition-colors duration-300 hover:text-accent print:no-underline"
+                      >
+                        {project.name}
+                      </Link>
+                    ) : (
+                      project.name
+                    )}
                     <span className="text-fg-muted italic"> — {project.kind}</span>
                   </h3>
                   <p className="font-mono text-[10px] tracking-[0.16em] text-fg-faint uppercase">
@@ -152,7 +174,8 @@ export default function ResumePage() {
                 </div>
                 <Bullets items={project.bullets} />
               </article>
-            ))}
+              );
+            })}
           </Section>
         </div>
 

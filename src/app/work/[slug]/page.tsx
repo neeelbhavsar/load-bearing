@@ -68,13 +68,14 @@ export async function generateMetadata({
   const project = bySlug(slug);
   if (!project) return {};
 
-  const description = searchDescription(project.blurb);
+  const description = project.seoDescription ?? searchDescription(project.blurb);
 
   return {
-    // Just the name. The root template appends "— Neel Bhavsar", and the kicker
-    // is a full sentence — pulling it in here produced titles near 80 characters
-    // that a search result would cut off mid-phrase.
-    title: project.title,
+    // Name plus "case study". The root template appends "— Neel Bhavsar". The
+    // kicker is a full sentence, and pulling it in produced titles near 80
+    // characters that a search result would cut off mid-phrase. A bare name
+    // ("Jolt — Neel Bhavsar") said nothing about what the page is.
+    title: `${project.title} case study`,
     description,
     alternates: { canonical: `/work/${project.slug}` },
     openGraph: {
@@ -107,7 +108,7 @@ export default async function ProjectPage({
       <Link
         href="/#work"
         data-cursor="back"
-        className="group inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase transition-colors duration-300 hover:text-accent"
+        className="group inline-flex min-h-11 items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase transition-colors duration-300 hover:text-accent"
       >
         <ArrowLeft
           size={14}
@@ -205,16 +206,18 @@ export default async function ProjectPage({
           <Section label="Outcomes" first>
             <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border">
               {project.detail.outcomes.map((outcome) => (
-                <div key={outcome.label} className="bg-bg-elev p-5">
+                // dt must come before its dd; flex-col-reverse keeps the value
+                // visually on top.
+                <div key={outcome.label} className="flex flex-col-reverse bg-bg-elev p-5">
+                  <dt className="mt-2 font-mono text-[10px] leading-tight tracking-[0.16em] text-fg-faint uppercase">
+                    {outcome.label}
+                  </dt>
                   <dd
                     className="font-display text-2xl tracking-tight sm:text-3xl"
                     style={{ color: project.accent }}
                   >
                     {outcome.value}
                   </dd>
-                  <dt className="mt-2 font-mono text-[10px] leading-tight tracking-[0.16em] text-fg-faint uppercase">
-                    {outcome.label}
-                  </dt>
                 </div>
               ))}
             </dl>
@@ -288,6 +291,13 @@ export default async function ProjectPage({
             `/#contact` rather than `#contact` because this page isn't the home
             page, so the bare anchor has no target here. Same convention the
             résumé page uses for `/#work`. */}
+        <Link
+          href="/resume"
+          className="inline-flex min-h-11 items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase transition-colors duration-300 hover:text-accent sm:ml-auto sm:mr-6"
+        >
+          Résumé
+        </Link>
+
         <Link
           href="/#contact"
           data-cursor="talk"
