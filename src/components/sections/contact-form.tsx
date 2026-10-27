@@ -151,7 +151,10 @@ export function ContactForm() {
           any submission that fills it. Not `display:none` — some bots skip
           those — and kept out of the tab order and the accessibility tree. */}
       <div aria-hidden className="absolute left-[-9999px] h-px w-px overflow-hidden">
-        <label htmlFor="company">Company (leave empty)</label>
+        {/* Not "Company": an agent filling the form on someone's behalf reads
+            labels, and would happily fill a field that asks for a company —
+            then the message is silently dropped as spam. */}
+        <label htmlFor="company">Spam check, leave this blank</label>
         <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 

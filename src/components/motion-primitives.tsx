@@ -117,13 +117,27 @@ export function StaggerList({ children, className }: { children: ReactNode; clas
   );
 }
 
-/** Small monospace section marker, e.g. "02 / EXPERIENCE". */
-export function SectionLabel({ index, children }: { index: string; children: ReactNode }) {
+/**
+ * Small monospace section marker, e.g. "02 / EXPERIENCE".
+ *
+ * `heading` makes the label the section's <h2>, for sections that have no
+ * display heading of their own — otherwise they're missing from the outline.
+ */
+export function SectionLabel({
+  index,
+  children,
+  heading,
+}: {
+  index: string;
+  children: ReactNode;
+  heading?: boolean;
+}) {
+  const Label = heading ? "h2" : "span";
   return (
     <Reveal className="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] text-fg-faint uppercase">
       <span className="text-accent">{index}</span>
       <span className="h-px w-8 bg-border-strong" aria-hidden />
-      <span>{children}</span>
+      <Label>{children}</Label>
     </Reveal>
   );
 }

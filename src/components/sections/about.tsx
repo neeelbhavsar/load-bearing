@@ -82,12 +82,14 @@ function Word({
 }) {
   const opacity = useTransform(progress, range, [0.16, 1]);
   return (
-    <span className="relative mr-[0.28em] inline-block">
-      {/* Faint backdrop so a word is never invisible, only unlit. aria-hidden
-          because the animated copy below is the one that gets read. */}
-      <span aria-hidden className="absolute inset-0 opacity-15">
-        {children}
-      </span>
+    // Faint backdrop so a word is never invisible, only unlit. Drawn by ::before
+    // from data-word rather than a second span: aria-hidden keeps a duplicate
+    // from screen readers, but crawlers and text extractors read it anyway, and
+    // the paragraph came out as "I I help help teams teams".
+    <span
+      data-word={children}
+      className="relative mr-[0.28em] inline-block before:absolute before:inset-0 before:opacity-15 before:content-[attr(data-word)]"
+    >
       {/* Reduced motion: fully lit, no scroll coupling. */}
       <motion.span style={reduced ? undefined : { opacity }}>{children}</motion.span>
     </span>
@@ -97,7 +99,9 @@ function Word({
 export function About() {
   return (
     <section id="about" className="relative mx-auto max-w-[1400px] px-5 py-20 sm:px-8 sm:py-36">
-      <SectionLabel index="01">{about.heading}</SectionLabel>
+      <SectionLabel index="01" heading>
+        {about.heading}
+      </SectionLabel>
 
       <div className="mt-10 grid gap-10 sm:mt-14 sm:gap-14 lg:grid-cols-[1.35fr_1fr] lg:gap-24">
         <ScrubbedCopy paragraphs={about.paragraphs} />
