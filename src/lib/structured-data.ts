@@ -210,6 +210,8 @@ export function projectGraph(project: Project) {
         headline: project.detail.kicker,
         description: project.blurb,
         url,
+        mainEntityOfPage: url,
+        inLanguage: "en",
         // The generated share card, not project.image — that is Unsplash stock,
         // and schema shouldn't present a stock photo as the work itself.
         image: `${url}/opengraph-image`,

@@ -157,6 +157,11 @@ function FeaturedQuote({ item }: { item: Testimonial }) {
 
         <figcaption className="mt-7 sm:mt-9">
           <Attribution item={item} size="lg" />
+          {item.note && (
+            <p className="mt-3 font-mono text-[11px] tracking-[0.12em] text-fg-faint">
+              {item.note}
+            </p>
+          )}
         </figcaption>
       </figure>
     </div>
@@ -259,12 +264,12 @@ function Attribution({ item, size }: { item: Testimonial; size: "sm" | "lg" }) {
         </p>
         {/* role can be empty when the title isn't known — don't render a
             dangling separator for it */}
-        <p className="mt-0.5 font-mono text-[10px] leading-relaxed tracking-[0.16em] text-fg-faint uppercase">
+        <p className="mt-0.5 font-mono text-[11px] leading-relaxed tracking-[0.16em] text-fg-faint uppercase">
           {[item.role, item.company].filter(Boolean).join(" · ")}
         </p>
       </div>
       <span
-        className="ml-auto shrink-0 rounded-full border border-border px-3 py-1 font-mono text-[9px] tracking-[0.2em] text-fg-faint uppercase"
+        className="ml-auto shrink-0 rounded-full border border-border px-3 py-1 font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase"
         style={item.draft ? { borderColor: "var(--color-border-strong)" } : undefined}
       >
         {item.draft ? "Draft" : item.relation}
@@ -272,11 +277,11 @@ function Attribution({ item, size }: { item: Testimonial; size: "sm" | "lg" }) {
 
       {item.projects && item.projects.length > 0 && (
         <ul className="flex w-full flex-wrap items-center gap-2 border-t border-border pt-4">
-          <li className="font-mono text-[9px] tracking-[0.2em] text-fg-faint uppercase">on</li>
+          <li className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">on</li>
           {item.projects.map((p) => (
             <li
               key={p}
-              className="rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-wide"
+              className="rounded-full border px-2.5 py-1 font-mono text-[11px] tracking-wide"
               style={{ borderColor: `${item.accent}55`, color: item.accent }}
             >
               {p}

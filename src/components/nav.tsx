@@ -116,6 +116,14 @@ export function Nav() {
                 </a>
               );
             })}
+            {/* A page, not a section — kept out of navItems, which the
+                scroll-spy feeds to querySelector as #ids. */}
+            <a
+              href="/resume"
+              className="rounded-full px-3.5 py-2 font-mono text-xs tracking-wide text-fg-muted uppercase transition-colors duration-200 hover:text-fg"
+            >
+              Résumé
+            </a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -181,6 +189,21 @@ export function Nav() {
                   {item.label}
                 </motion.a>
               ))}
+              <motion.a
+                href="/resume"
+                onClick={() => setOpen(false)}
+                className="flex items-baseline border-b border-border py-4 font-display text-[1.75rem] tracking-tight"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.06 + navItems.length * 0.05,
+                  duration: 0.5,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                <span className="mr-3 font-mono text-xs text-accent">↗</span>
+                Résumé
+              </motion.a>
             </nav>
 
             {/* the desktop "Let's talk" pill is hidden on the smallest screens —

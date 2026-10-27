@@ -153,7 +153,8 @@ export default async function ProjectPage({
           src={project.image}
           alt={`${project.title} — cover`}
           fill
-          priority
+          preload
+          fetchPriority="high"
           sizes="(min-width: 1100px) 1100px, 100vw"
           className="object-cover"
         />
@@ -209,7 +210,7 @@ export default async function ProjectPage({
                 // dt must come before its dd; flex-col-reverse keeps the value
                 // visually on top.
                 <div key={outcome.label} className="flex flex-col-reverse bg-bg-elev p-5">
-                  <dt className="mt-2 font-mono text-[10px] leading-tight tracking-[0.16em] text-fg-faint uppercase">
+                  <dt className="mt-2 font-mono text-[11px] leading-tight tracking-[0.16em] text-fg-faint uppercase">
                     {outcome.label}
                   </dt>
                   <dd
@@ -228,7 +229,7 @@ export default async function ProjectPage({
               {project.stack.map((item) => (
                 <li
                   key={item}
-                  className="rounded-full border border-border bg-bg-elev px-2.5 py-1 font-mono text-[10px] tracking-wide text-fg-muted"
+                  className="rounded-full border border-border bg-bg-elev px-2.5 py-1 font-mono text-[11px] tracking-wide text-fg-muted"
                 >
                   {item}
                 </li>

@@ -10,7 +10,9 @@
   --color-surface: #11141b;
   --color-fg: #f4f6fa;
   --color-fg-muted: #9aa3b5;
-  --color-fg-faint: #5d6577;
+  /* 5.2:1 on bg, 5.0:1 on bg-elev — was #5d6577 at 3.4:1, under AA for the
+     small mono labels that use it most. */
+  --color-fg-faint: #7a8295;
   --color-border: #1f242e;
   --color-border-strong: #2c333f;
   --color-accent: #b4ff39;

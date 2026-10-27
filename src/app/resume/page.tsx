@@ -64,7 +64,8 @@ export default function ResumePage() {
             src={profile.photo}
             alt={`${profile.name} — portrait`}
             fill
-            priority
+            preload
+            fetchPriority="high"
             sizes="144px"
             className="object-cover object-[center_22%]"
           />
@@ -168,7 +169,7 @@ export default function ResumePage() {
                     )}
                     <span className="text-fg-muted italic"> — {project.kind}</span>
                   </h3>
-                  <p className="font-mono text-[10px] tracking-[0.16em] text-fg-faint uppercase">
+                  <p className="font-mono text-[11px] tracking-[0.16em] text-fg-faint uppercase">
                     {project.period}
                   </p>
                 </div>
@@ -184,14 +185,14 @@ export default function ResumePage() {
             <dl className="space-y-6">
               {resume.skills.map((group) => (
                 <div key={group.group}>
-                  <dt className="font-mono text-[10px] tracking-[0.2em] text-fg-faint uppercase">
+                  <dt className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
                     {group.group}
                   </dt>
                   <dd className="mt-2.5 flex flex-wrap gap-1.5">
                     {group.items.map((item) => (
                       <span
                         key={item}
-                        className="rounded-full border border-border bg-bg-elev px-2.5 py-1 font-mono text-[10px] tracking-wide text-fg-muted"
+                        className="rounded-full border border-border bg-bg-elev px-2.5 py-1 font-mono text-[11px] tracking-wide text-fg-muted"
                       >
                         {item}
                       </span>
@@ -222,7 +223,7 @@ export default function ResumePage() {
                   className="flex flex-wrap items-baseline justify-between gap-x-4 border-b border-border pb-3 last:border-0 last:pb-0"
                 >
                   <dt className="text-fg">{lang.name}</dt>
-                  <dd className="font-mono text-[10px] tracking-[0.16em] text-fg-faint uppercase">
+                  <dd className="font-mono text-[11px] tracking-[0.16em] text-fg-faint uppercase">
                     {lang.level}
                   </dd>
                 </div>
@@ -234,7 +235,7 @@ export default function ResumePage() {
 
       {/* ── foot ── */}
       <div className="mt-16 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between print:hidden">
-        <p className="font-mono text-[10px] tracking-[0.18em] text-fg-faint uppercase">
+        <p className="font-mono text-[11px] tracking-[0.18em] text-fg-faint uppercase">
           Updated {resume.experience[0].period.split("—")[0].trim()} onward · Ahmedabad, India
         </p>
         <div className="flex flex-wrap gap-3">

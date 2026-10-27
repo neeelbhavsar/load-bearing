@@ -25,10 +25,16 @@ export function Cursor() {
       return;
     }
 
+    // Only touch React state when the hovered target changes. pointermove fires
+    // at display rate; setting state on every one queued a render check per
+    // event even when nothing had changed.
+    let last: HTMLElement | null | undefined;
     const move = (e: PointerEvent) => {
       x.set(e.clientX);
       y.set(e.clientY);
       const hit = (e.target as HTMLElement).closest<HTMLElement>("[data-cursor]");
+      if (hit === last) return;
+      last = hit;
       setActive(Boolean(hit));
       setLabel(hit?.dataset.cursor || null);
     };
