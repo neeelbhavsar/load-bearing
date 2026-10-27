@@ -157,6 +157,11 @@ function FeaturedQuote({ item }: { item: Testimonial }) {
 
         <figcaption className="mt-7 sm:mt-9">
           <Attribution item={item} size="lg" />
+          {item.note && (
+            <p className="mt-3 font-mono text-[11px] tracking-[0.12em] text-fg-faint">
+              {item.note}
+            </p>
+          )}
         </figcaption>
       </figure>
     </div>

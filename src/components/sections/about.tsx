@@ -122,6 +122,15 @@ export function About() {
               </div>
             ))}
           </dl>
+
+          {/* Plain text, not scroll-scrubbed: this is the passage meant to be
+              lifted whole, so it should read at full strength from the start. */}
+          <div className="mt-8 sm:mt-10">
+            <h3 className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
+              In brief
+            </h3>
+            <p className="mt-3 text-[15px] leading-relaxed text-fg-muted">{about.brief}</p>
+          </div>
         </Reveal>
       </div>
     </section>

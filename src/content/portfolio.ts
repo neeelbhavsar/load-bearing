@@ -109,6 +109,13 @@ export const seo = {
 
 export const about = {
   heading: "About",
+  /**
+   * Third-person, self-contained answer to "who is Neel Bhavsar" — the passage
+   * search and AI engines can lift whole. Every fact in it appears elsewhere on
+   * the site; keep it that way when the résumé changes.
+   */
+  brief:
+    "Neel Bhavsar is a full stack developer based in Ahmedabad, India, with 5+ years building production web applications. He has been at Artoon Solutions since April 2021, where he works across the stack: React and Next.js front-ends on Node.js, Express and NestJS APIs, with MongoDB, PostgreSQL, MySQL, Neo4j and Redis chosen to fit each product. His work includes a car rental platform managing 200+ vehicles, a live streaming platform supporting 500+ concurrent streamers with PayPal subscriptions and payouts, and Stripe and PayPal integrations handling USD 50,000+ a month. He has cut API response times by 70% through indexing and Redis caching, and leads a team of five developers.",
   paragraphs: [
     "I help teams turn business requirements into production-ready software — secure APIs, real-time services, and well-modeled data behind clean React front-ends.",
     "MERN-stack engineer with 5+ years building full-stack web applications: React front-ends, robust RESTful APIs, secure auth flows, and databases tuned for performance and reliability. I work across relational, document and graph stores — MongoDB, MySQL, PostgreSQL, Neo4j and Redis — with a focus on efficient data modeling in polyglot architectures.",
@@ -666,6 +673,12 @@ export type Testimonial = {
   name: string;
   /** May be empty when the person's title isn't known. */
   role: string;
+  /**
+   * Shown under the attribution when the text isn't a single verbatim quote —
+   * e.g. merged or edited reviews. Says so on the page rather than only in a
+   * code comment.
+   */
+  note?: string;
   company: string;
   /** "Client" | "Manager" | "Teammate" — shown as a small tag. */
   relation: string;
@@ -724,6 +737,7 @@ export const testimonials = {
       ],
       name: "Karan Rana",
       role: "Team Leader",
+      note: "Compiled from weekly reviews, lightly edited.",
       company: "Artoon Solutions",
       relation: "Team Leader",
       accent: "#5BE9FF",
