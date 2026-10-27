@@ -50,7 +50,7 @@ export function Contact() {
               <dl className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2">
                 {contact.details.map((d) => (
                   <div key={d.label} className="bg-bg-elev p-5">
-                    <dt className="font-mono text-[10px] tracking-[0.2em] text-fg-faint uppercase">
+                    <dt className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
                       {d.label}
                     </dt>
                     <dd className="mt-2 text-sm leading-relaxed break-words text-fg">{d.value}</dd>
@@ -114,7 +114,7 @@ export function Contact() {
                   target={s.href.startsWith("http") ? "_blank" : undefined}
                   rel="noreferrer noopener"
                   data-cursor=""
-                  className="group relative font-mono text-xs tracking-[0.2em] text-fg-muted uppercase transition-colors duration-300 hover:text-fg"
+                  className="group relative font-mono text-xs tracking-[0.2em] text-fg-muted uppercase transition-colors duration-300 hover:text-fg after:absolute after:-inset-x-1 after:-inset-y-3 after:content-['']"
                 >
                   {s.label}
                   <span
@@ -125,7 +125,7 @@ export function Contact() {
               </li>
             ))}
           </ul>
-          <p className="font-mono text-[10px] tracking-[0.2em] text-fg-faint uppercase">
+          <p className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
             © {new Date().getFullYear()} {profile.name} · Built with Next.js
           </p>
         </div>

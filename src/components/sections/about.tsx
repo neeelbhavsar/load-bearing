@@ -113,7 +113,7 @@ export function About() {
                 key={s.label}
                 className="group relative bg-bg-elev p-5 transition-colors duration-500 hover:bg-surface sm:p-8"
               >
-                <dt className="font-mono text-[9px] leading-tight tracking-[0.16em] text-fg-faint uppercase sm:text-[10px] sm:tracking-[0.2em]">
+                <dt className="font-mono text-[11px] leading-tight tracking-[0.16em] text-fg-faint uppercase sm:tracking-[0.2em]">
                   {s.label}
                 </dt>
                 <dd className="mt-2.5 font-display text-3xl tracking-tight text-fg transition-colors duration-500 group-hover:text-accent sm:mt-3 sm:text-5xl">

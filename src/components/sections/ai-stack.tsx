@@ -53,7 +53,7 @@ export function AiStack() {
                     >
                       {tool.name}
                     </h3>
-                    <span className="font-mono text-[10px] tracking-[0.2em] text-fg-faint uppercase">
+                    <span className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
                       {tool.role}
                     </span>
                   </div>

@@ -66,7 +66,7 @@ export function Services() {
                         onFocus={coarse ? undefined : () => setActive(i)}
                         onClick={() => setActive(isActive ? -1 : i)}
                         aria-expanded={isActive}
-                        className="flex w-full items-baseline gap-4 text-left outline-none sm:gap-6"
+                        className="flex w-full items-baseline gap-4 py-2 text-left outline-none sm:gap-6"
                       >
                         <span
                           className="font-mono text-[11px] tracking-[0.2em] transition-colors duration-500"

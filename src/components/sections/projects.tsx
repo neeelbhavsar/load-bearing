@@ -200,7 +200,7 @@ function HorizontalGallery({ onOpen }: { onOpen: (p: Project) => void }) {
             <span className="font-mono text-[11px] tracking-[0.2em] text-fg-faint tabular-nums">
               {String(projects.length).padStart(2, "0")}
             </span>
-            <span className="hidden items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-fg-faint uppercase sm:flex">
+            <span className="hidden items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase sm:flex">
               <ArrowDown size={12} aria-hidden className="animate-bounce" />
               Scroll
             </span>
@@ -272,12 +272,12 @@ function GalleryCard({
           className="absolute inset-0 bg-gradient-to-t from-bg-elev via-bg-elev/30 to-transparent"
         />
 
-        <span className="absolute top-4 left-4 z-10 rounded-full border border-border-strong bg-bg/70 px-2.5 py-1 font-mono text-[10px] tracking-[0.18em] uppercase backdrop-blur sm:top-5 sm:left-5 sm:px-3 sm:tracking-[0.2em]">
+        <span className="absolute top-4 left-4 z-10 rounded-full border border-border-strong bg-bg/70 px-2.5 py-1 font-mono text-[11px] tracking-[0.18em] uppercase backdrop-blur sm:top-5 sm:left-5 sm:px-3 sm:tracking-[0.2em]">
           {project.year}
         </span>
         {project.ai && (
           <span
-            className="absolute top-4 right-4 z-10 inline-flex items-center gap-1.5 rounded-full border bg-bg/60 px-2.5 py-1 font-mono text-[10px] tracking-[0.16em] uppercase backdrop-blur sm:top-5 sm:right-5"
+            className="absolute top-4 right-4 z-10 inline-flex items-center gap-1.5 rounded-full border bg-bg/60 px-2.5 py-1 font-mono text-[11px] tracking-[0.16em] uppercase backdrop-blur sm:top-5 sm:right-5"
             style={{ borderColor: project.accent, color: project.accent }}
           >
             <Sparkles size={11} aria-hidden />
@@ -304,7 +304,7 @@ function GalleryCard({
           </h3>
           {project.metric && (
             <span
-              className="mt-1.5 shrink-0 text-right font-mono text-[9px] leading-tight tracking-[0.14em] uppercase"
+              className="mt-1.5 shrink-0 text-right font-mono text-[11px] leading-tight tracking-[0.14em] uppercase"
               style={{ color: project.accent }}
             >
               {project.metric}
@@ -321,20 +321,20 @@ function GalleryCard({
           {project.stack.slice(0, 3).map((s) => (
             <li
               key={s}
-              className="rounded-full border border-border px-2.5 py-1 font-mono text-[10px] tracking-wide text-fg-faint"
+              className="rounded-full border border-border px-2.5 py-1 font-mono text-[11px] tracking-wide text-fg-faint"
             >
               {s}
             </li>
           ))}
           {project.stack.length > 3 && (
-            <li className="rounded-full border border-border px-2.5 py-1 font-mono text-[10px] tracking-wide text-fg-faint">
+            <li className="rounded-full border border-border px-2.5 py-1 font-mono text-[11px] tracking-wide text-fg-faint">
               +{project.stack.length - 3}
             </li>
           )}
         </ul>
 
         <div className="mt-auto flex items-center justify-between gap-3 border-t border-border pt-3.5 sm:pt-4">
-          <span className="min-w-0 truncate font-mono text-[10px] tracking-[0.16em] text-fg-faint uppercase">
+          <span className="min-w-0 truncate font-mono text-[11px] tracking-[0.16em] text-fg-faint uppercase">
             {project.role}
           </span>
           {/* A real link, not a button: the card body opens the modal for a
@@ -349,7 +349,7 @@ function GalleryCard({
             href={`/work/${project.slug}`}
             onClick={(e) => e.stopPropagation()}
             aria-label={`Case study — ${project.title}`}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border-strong px-3.5 py-2.5 font-mono text-[10px] tracking-[0.16em] uppercase transition-colors duration-300 group-hover:border-transparent group-hover:bg-[var(--acc)] group-hover:text-on-accent sm:gap-2 sm:px-4 sm:tracking-[0.18em]"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border-strong min-h-11 px-3.5 py-2.5 font-mono text-[11px] tracking-[0.16em] uppercase transition-colors duration-300 group-hover:border-transparent group-hover:bg-[var(--acc)] group-hover:text-on-accent sm:gap-2 sm:px-4 sm:tracking-[0.18em]"
           >
             Case study
             <ArrowUpRight size={13} aria-hidden />
@@ -387,7 +387,7 @@ function ReducedGrid({ onOpen }: { onOpen: (p: Project) => void }) {
               aria-hidden
               className="absolute inset-0 bg-gradient-to-t from-bg-elev via-bg-elev/30 to-transparent"
             />
-            <span className="absolute top-5 left-5 rounded-full border border-border-strong bg-bg/70 px-3 py-1 font-mono text-[10px] tracking-[0.2em] uppercase">
+            <span className="absolute top-5 left-5 rounded-full border border-border-strong bg-bg/70 px-3 py-1 font-mono text-[11px] tracking-[0.2em] uppercase">
               {String(i + 1).padStart(2, "0")} / {project.year}
             </span>
           </div>
@@ -400,20 +400,20 @@ function ReducedGrid({ onOpen }: { onOpen: (p: Project) => void }) {
               {project.stack.map((s) => (
                 <li
                   key={s}
-                  className="rounded-full border border-border px-2.5 py-1 font-mono text-[10px] tracking-wide text-fg-faint"
+                  className="rounded-full border border-border px-2.5 py-1 font-mono text-[11px] tracking-wide text-fg-faint"
                 >
                   {s}
                 </li>
               ))}
             </ul>
             <div className="mt-auto flex items-center justify-between gap-4 border-t border-border pt-5 sm:mt-6">
-              <span className="font-mono text-[10px] tracking-[0.16em] text-fg-faint uppercase">
+              <span className="font-mono text-[11px] tracking-[0.16em] text-fg-faint uppercase">
                 {project.role}
               </span>
               <button
                 type="button"
                 onClick={() => onOpen(project)}
-                className="inline-flex items-center gap-2 rounded-full border border-border-strong px-4 py-2.5 font-mono text-[10px] tracking-[0.18em] uppercase hover:border-accent hover:text-accent"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border-strong px-4 py-2.5 font-mono text-[11px] tracking-[0.18em] uppercase hover:border-accent hover:text-accent"
               >
                 Case study
                 <ArrowUpRight size={13} aria-hidden />
@@ -505,7 +505,9 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
                     fill
                     sizes="(max-width: 1024px) 100vw, 980px"
                     className="object-cover"
-                    priority
+                    // Rendered only once the modal opens, so a head preload can\'t apply;
+                    // eager just skips lazy-loading for an image already on screen.
+                    loading="eager"
                   />
                   <span
                     aria-hidden
@@ -513,7 +515,7 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
                   />
                 </div>
                 <div className="px-5 pt-5 sm:absolute sm:inset-x-0 sm:bottom-0 sm:px-10 sm:pt-0 sm:pb-10">
-                  <p className="font-mono text-[10px] tracking-[0.2em] text-fg-faint uppercase">
+                  <p className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
                     {project.year} · {project.role}
                   </p>
                   <h3 className="mt-2.5 font-display text-[clamp(1.85rem,7vw,3.5rem)] leading-[1.05] tracking-[-0.03em] sm:leading-none">
@@ -538,7 +540,7 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
                       <dt className="font-display text-xl leading-none tracking-tight sm:text-3xl">
                         {o.value}
                       </dt>
-                      <dd className="mt-2 font-mono text-[9px] leading-tight tracking-[0.14em] text-fg-faint uppercase sm:text-[10px] sm:tracking-[0.18em]">
+                      <dd className="mt-2 font-mono text-[11px] leading-tight tracking-[0.14em] text-fg-faint uppercase sm:tracking-[0.18em]">
                         {o.label}
                       </dd>
                     </div>
@@ -559,7 +561,7 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
                   <div className="mt-8 flex gap-3 rounded-xl border border-border bg-surface/60 p-5">
                     <Sparkles size={15} className="mt-0.5 shrink-0 text-accent" aria-hidden />
                     <p className="text-sm leading-relaxed text-fg-muted">
-                      <span className="font-mono text-[10px] tracking-[0.2em] text-accent uppercase">
+                      <span className="font-mono text-[11px] tracking-[0.2em] text-accent uppercase">
                         AI layer
                       </span>
                       <br />
@@ -664,7 +666,7 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
 
 function ModalHeading({ children }: { children: string }) {
   return (
-    <h4 className="mt-10 mb-4 flex items-center gap-3 font-mono text-[10px] tracking-[0.22em] text-fg-faint uppercase sm:mt-12 sm:mb-5 sm:text-[11px] sm:tracking-[0.28em]">
+    <h4 className="mt-10 mb-4 flex items-center gap-3 font-mono text-[11px] tracking-[0.22em] text-fg-faint uppercase sm:mt-12 sm:mb-5 sm:tracking-[0.28em]">
       {children}
       <span aria-hidden className="h-px flex-1 bg-border" />
     </h4>

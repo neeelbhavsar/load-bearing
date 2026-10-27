@@ -11,12 +11,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteUrl();
 
   return [
-    { url: base, changeFrequency: "monthly", priority: 1 },
-    { url: `${base}/resume`, changeFrequency: "monthly", priority: 0.8 },
-    ...projects.map((project) => ({
-      url: `${base}/work/${project.slug}`,
-      changeFrequency: "yearly" as const,
-      priority: 0.7,
-    })),
+    // No changefreq or priority: Google ignores both. lastmod is the field
+    // that counts, and it should only be added with real edit dates.
+    { url: base },
+    { url: `${base}/resume` },
+    ...projects.map((project) => ({ url: `${base}/work/${project.slug}` })),
   ];
 }

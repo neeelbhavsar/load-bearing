@@ -98,14 +98,10 @@ export const seo = {
    * structured data covers the full set of queries. Keep every entry a title
    * the experience on this page actually supports.
    */
-  jobTitles: [
-    "Full Stack Developer",
-    "MERN Stack Developer",
-    "Full Stack MERN Developer",
-    "Node.js Developer",
-    "React Developer",
-    "Backend Developer",
-  ],
+  // Two, not six. Near-duplicate titles ("Full Stack MERN Developer" next to
+  // "MERN Stack Developer") read as keyword stuffing; the stack keywords are
+  // carried by knowsAbout instead.
+  jobTitles: ["Full Stack Developer", "MERN Stack Developer"],
   worksFor: { name: "Artoon Solutions Pvt. Ltd.", url: "https://artoonsolutions.com" },
   alumniOf: { name: "Silver Oak University", url: "https://silveroakuni.ac.in" },
   address: { city: "Ahmedabad", region: "Gujarat", country: "IN" },

@@ -87,7 +87,7 @@ export function Hero() {
             animate={reduced ? undefined : { y: 0 }}
             transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
-            <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] tracking-[0.16em] uppercase sm:mt-7 sm:text-xs sm:tracking-[0.2em]">
+            <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] tracking-[0.16em] uppercase sm:mt-7 sm:text-xs sm:tracking-[0.2em]">
               <span className="text-accent">{profile.role}</span>
               <span aria-hidden className="text-border-strong">
                 /
@@ -126,7 +126,7 @@ export function Hero() {
             {/* years / company strip */}
             <dl className="mt-10 flex flex-wrap gap-x-8 gap-y-5 border-t border-border pt-6 sm:mt-12 sm:gap-x-10 sm:pt-7">
               <div>
-                <dt className="font-mono text-[10px] tracking-[0.2em] text-fg-faint uppercase">
+                <dt className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
                   Experience
                 </dt>
                 <dd className="mt-1.5 font-display text-xl tracking-tight sm:text-2xl">
@@ -134,7 +134,7 @@ export function Hero() {
                 </dd>
               </div>
               <div>
-                <dt className="font-mono text-[10px] tracking-[0.2em] text-fg-faint uppercase">
+                <dt className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
                   Currently at
                 </dt>
                 <dd className="mt-1.5 font-display text-xl tracking-tight sm:text-2xl">
@@ -166,7 +166,8 @@ export function Hero() {
               src={profile.photo}
               alt={`${profile.name} — portrait`}
               fill
-              priority
+              preload
+              fetchPriority="high"
               sizes="(max-width: 640px) 250px, (max-width: 1024px) 340px, 34vw"
               className="object-cover object-[center_22%] transition-transform duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
             />
@@ -175,7 +176,7 @@ export function Hero() {
               aria-hidden
               className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg/85 to-transparent"
             />
-            <p className="absolute bottom-4 left-5 font-mono text-[10px] tracking-[0.2em] text-fg-muted uppercase">
+            <p className="absolute bottom-4 left-5 font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase">
               {profile.name.split(" ")[0]} — {profile.location.split(" · ")[0]}
             </p>
           </div>

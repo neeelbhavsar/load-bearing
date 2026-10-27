@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
     // Project cover art is pulled from Unsplash; the portrait is local.
     remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }],
   },
+  experimental: {
+    // The one stylesheet (~11 KB of Tailwind) was render-blocking and sat on
+    // the critical path ahead of the hero portrait. A portfolio's visitors are
+    // mostly first-timers, so inlining beats a cacheable file here.
+    inlineCss: true,
+  },
   // Vercel already sends HSTS. These cover the rest of the baseline. No full
   // script/style CSP: Next's inline bootstrap and motion's inline styles would
   // need nonces, which forces every page dynamic. frame-ancestors is the part

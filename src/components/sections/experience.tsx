@@ -52,7 +52,7 @@ export function Experience() {
                 target="_blank"
                 rel="noreferrer noopener"
                 data-cursor="visit"
-                className="group mt-8 inline-flex items-center gap-2 border-b border-border-strong pb-1 font-mono text-xs tracking-[0.18em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent"
+                className="group relative mt-8 inline-flex items-center gap-2 after:absolute after:-inset-x-1 after:-inset-y-3 after:content-[''] border-b border-border-strong pb-1 font-mono text-xs tracking-[0.18em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent"
               >
                 Company site
                 <ArrowUpRight

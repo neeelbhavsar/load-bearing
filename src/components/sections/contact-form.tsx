@@ -118,7 +118,7 @@ export function ContactForm() {
       <div className="grid gap-5 sm:grid-cols-2">
         {FIELDS.map((f, i) => (
           <label key={f.name} className={"flex flex-col gap-2" + (i === 2 ? " sm:col-span-2" : "")}>
-            <span className="font-mono text-[10px] tracking-[0.2em] text-fg-faint uppercase">
+            <span className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
               {f.label}
               {f.required && <span className="ml-1 text-accent">*</span>}
             </span>
@@ -135,7 +135,7 @@ export function ContactForm() {
       </div>
 
       <label className="flex flex-col gap-2">
-        <span className="font-mono text-[10px] tracking-[0.2em] text-fg-faint uppercase">
+        <span className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
           Message<span className="ml-1 text-accent">*</span>
         </span>
         <textarea
