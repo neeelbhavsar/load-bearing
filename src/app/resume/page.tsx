@@ -78,6 +78,9 @@ export default function ResumePage() {
           <p className="mt-3 font-mono text-[11px] tracking-[0.22em] text-accent uppercase sm:text-xs">
             {resume.title}
           </p>
+          <p className="mt-2 font-mono text-[11px] tracking-wide text-fg-muted">
+            {resume.headline.join(" · ")}
+          </p>
 
           <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] tracking-wide text-fg-muted">
             <li className="inline-flex items-center gap-2">
@@ -142,7 +145,16 @@ export default function ResumePage() {
                     {job.period}
                   </p>
                 </div>
-                <p className="mt-1.5 font-mono text-xs tracking-wide text-accent">{job.company}</p>
+                <p className="mt-1.5 font-mono text-xs tracking-wide text-accent">
+                  {job.company}
+                  <span className="text-fg-faint"> · {job.location}</span>
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-fg-muted">
+                  <span className="font-mono text-[11px] tracking-[0.16em] text-fg-faint uppercase">
+                    Career progression:{" "}
+                  </span>
+                  {job.progression.map((step) => `${step.title} (${step.year})`).join(" → ")}
+                </p>
                 <Bullets items={job.bullets} />
               </article>
             ))}
@@ -173,6 +185,12 @@ export default function ResumePage() {
                     {project.period}
                   </p>
                 </div>
+                <p className="mt-1.5 font-mono text-xs tracking-wide text-accent">
+                  {project.role}
+                </p>
+                <p className="mt-2 font-mono text-[11px] leading-relaxed tracking-wide text-fg-faint">
+                  <span className="uppercase">Stack:</span> {project.stack}
+                </p>
                 <Bullets items={project.bullets} />
               </article>
               );
