@@ -16,11 +16,11 @@ export const profile = {
    * through the description and the JSON-LD in `seo` rather than by being
    * bolted onto this line.
    *
-   * Was "Backend & MERN Engineer", which contradicted the résumé's "Full Stack
-   * Developer" — two titles across one site split the signal and rank for
-   * neither.
+   * Must match the résumé's title (resume.title). Was "Backend & MERN
+   * Engineer", then "Full Stack Developer" — two titles across one site split
+   * the signal and rank for neither.
    */
-  role: "Full Stack Developer",
+  role: "Senior Full Stack Developer",
   tagline: "I build robust, scalable systems that quietly carry real products.",
   location: "Ahmedabad, India · Remote-friendly",
   availability: "Available for Selected Work",
@@ -46,13 +46,14 @@ export const profile = {
  * characters — longer gets truncated with an ellipsis.
  */
 export const seo = {
-  // Both target phrases appear unhyphenated, in the order people type them:
-  // "full stack developer" and "MERN stack". Hyphenating "full-stack" is better
-  // prose but a worse match for the query.
+  // "full stack developer" stays unhyphenated, the way people type it.
+  // Hyphenating "full-stack" is better prose but a worse match for the query.
+  // MERN is no longer in the visible copy (the résumé dropped it); it stays in
+  // knowsAbout and jobTitles below, where it still earns search coverage.
   description:
-    "Full stack developer in Ahmedabad with 5+ years building MERN stack products — React and Next.js front-ends on Node.js, Express and NestJS APIs.",
+    "Senior full stack developer in Ahmedabad with 5+ years building React, Next.js and NestJS products across ERP and logistics, streaming, EdTech and rentals.",
   resumeDescription:
-    "Résumé of Neel Bhavsar, full stack developer in Ahmedabad — 5+ years on MERN stack products across streaming, EdTech, sports and rentals. React, Node.js, AWS.",
+    "Résumé of Neel Bhavsar, senior full stack developer in Ahmedabad: 5+ years across ERP and logistics, streaming, EdTech, sports and rentals. React, NestJS, AWS.",
   /**
    * Google ignores the keywords meta tag entirely, so this exists for the
    * JSON-LD `knowsAbout` field, which it does read. Keep it to things the page
@@ -85,9 +86,12 @@ export const seo = {
     "Live video streaming",
     "Payment integration (Stripe, PayPal)",
     "Graph data modeling",
+    // Evidenced by the ASL ERP case study.
+    "Enterprise resource planning (ERP)",
+    "Role-based access control",
   ],
   /** The one visible title, matching `profile.role`. Used in <title> and OG. */
-  jobTitle: "Full Stack Developer",
+  jobTitle: "Senior Full Stack Developer",
   /**
    * Every position worth being found under. schema.org accepts repeated values
    * for `jobTitle`, so the entity can legitimately hold all of these — this is
@@ -101,7 +105,7 @@ export const seo = {
   // Two, not six. Near-duplicate titles ("Full Stack MERN Developer" next to
   // "MERN Stack Developer") read as keyword stuffing; the stack keywords are
   // carried by knowsAbout instead.
-  jobTitles: ["Full Stack Developer", "MERN Stack Developer"],
+  jobTitles: ["Senior Full Stack Developer", "MERN Stack Developer"],
   worksFor: { name: "Artoon Solutions Pvt. Ltd.", url: "https://artoonsolutions.com" },
   alumniOf: { name: "Silver Oak University", url: "https://silveroakuni.ac.in" },
   address: { city: "Ahmedabad", region: "Gujarat", country: "IN" },
@@ -115,10 +119,10 @@ export const about = {
    * the site; keep it that way when the résumé changes.
    */
   brief:
-    "Neel Bhavsar is a full stack developer based in Ahmedabad, India, with 5+ years building production web applications. He has been at Artoon Solutions since April 2021, where he works across the stack: React and Next.js front-ends on Node.js, Express and NestJS APIs, with MongoDB, PostgreSQL, MySQL, Neo4j and Redis chosen to fit each product. His work includes a car rental platform managing 200+ vehicles, a live streaming platform supporting 500+ concurrent streamers with PayPal subscriptions and payouts, and Stripe and PayPal integrations handling USD 50,000+ a month. He has cut API response times by 70% through indexing and Redis caching, and leads a team of five developers.",
+    "Neel Bhavsar is a senior full stack developer based in Ahmedabad, India, with 5+ years building production web applications. He has been at Artoon Solutions since April 2021, where he works across the stack: React and Next.js front-ends on Node.js, Express and NestJS APIs, with MongoDB, PostgreSQL, MySQL, Neo4j and Redis chosen to fit each product. His work includes 30+ screens and billing APIs for a 520-screen logistics ERP, a car rental platform managing 200+ vehicles, a live streaming platform supporting 500+ concurrent streamers with PayPal subscriptions and payouts, and Stripe and PayPal integrations handling USD 50,000+ a month. He has cut API response times by 70% through indexing and Redis caching, and leads a team of five developers.",
   paragraphs: [
     "I help teams turn business requirements into production-ready software — secure APIs, real-time services, and well-modeled data behind clean React front-ends.",
-    "MERN-stack engineer with 5+ years building full-stack web applications: React front-ends, robust RESTful APIs, secure auth flows, and databases tuned for performance and reliability. I work across relational, document and graph stores — MongoDB, MySQL, PostgreSQL, Neo4j and Redis — with a focus on efficient data modeling in polyglot architectures.",
+    "Senior full stack developer with 5+ years building web applications: React front-ends, robust RESTful APIs, secure auth flows, and databases tuned for performance and reliability. I work across relational, document and graph stores — MongoDB, MySQL, PostgreSQL, Neo4j and Redis — with a focus on efficient data modeling in polyglot architectures.",
     "My work is about turning requirements into systems that hold up: clean architecture, predictable contracts, indexes and caches that actually pay off. No compromise on the boring parts, because those are the parts that page you at 2am.",
   ],
   /**
@@ -174,11 +178,11 @@ export const experience = {
   companyUrl: "https://artoonsolutions.com",
   // Must match resume.experience[0].role — same company with two different
   // titles across two pages is the kind of thing a recruiter reads as careless.
-  role: "Full Stack Developer",
+  role: "Senior Full Stack Developer",
   period: "2021 — Present",
   location: "Ahmedabad, India · On-site",
   summary:
-    "Joined as a Node.js developer building event-management systems and grew into owning backend architecture — API contracts, polyglot data modeling, real-time pipelines, and production on AWS.",
+    "Joined as a Node.js developer building event-management systems, grew into owning backend architecture, and now work across the whole stack: API contracts, polyglot data modeling, real-time pipelines, React front-ends and production on AWS.",
   highlights: [
     {
       year: "2021",
@@ -196,9 +200,9 @@ export const experience = {
       year: "2026",
       // The current milestone, so it has to carry the current title too —
       // otherwise the timeline reintroduces the contradiction the header fixes.
-      title: "Full Stack Developer",
-      body: "Owning architecture for high-scale platforms — Braganza end to end, from an Express and PostgreSQL core with Redis caching on AWS through to the React and Next.js booking interface — and setting the API and data-modeling standards the team builds against.",
-      tags: ["Node.js", "Express", "React", "Next.js", "TypeScript", "PostgreSQL", "Redis", "AWS"],
+      title: "Senior Full Stack Developer",
+      body: "Owned Braganza's architecture end to end, from an Express and PostgreSQL core with Redis caching on AWS through to the React and Next.js booking interface. Now building screens, billing APIs and approval workflows for ASL ERP, a 520-screen logistics platform on React, NestJS and Prisma, while setting the API and data-modeling standards the team builds against.",
+      tags: ["React", "Next.js", "TypeScript", "NestJS", "Prisma", "PostgreSQL", "Redis", "AWS"],
     },
   ],
 } as const;
@@ -284,6 +288,68 @@ export const projects: readonly Project[] = [
         { value: "6", label: "Assistants supported" },
         { value: "Daily", label: "Auto-refresh" },
         { value: "0", label: "Servers to maintain" },
+      ],
+    },
+  },
+  {
+    slug: "asl-erp",
+    title: "ASL ERP",
+    seoDescription:
+      "A 520-screen logistics and freight forwarding ERP: air and sea shipments, transport, billing and approvals. React and NestJS, with RBAC and Gujarati localization.",
+    blurb:
+      "An enterprise ERP for logistics and freight forwarding, with about 520 screens covering air and sea export and import, transport and fleet, finance and billing, masters and approval workflows, plus role-based access and English and Gujarati localization.",
+    role: "Full stack",
+    year: "2026",
+    stack: [
+      "React 18",
+      "TypeScript",
+      "NestJS",
+      "Prisma",
+      "PostgreSQL",
+      "TanStack Query",
+      "Redis/BullMQ",
+      "Tailwind CSS",
+    ],
+    metric: "~520-screen ERP · 30+ screens shipped",
+    image:
+      "https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=1600&auto=format&fit=crop",
+    linkNote: "Internal enterprise system, so there's no public URL",
+    accent: "#FF9BD2",
+    detail: {
+      kicker: "Freight forwarding, from job planning to tax invoice",
+      overview: [
+        "ASL ERP runs a logistics and freight forwarding business: air and sea export and import shipments, transport and fleet, finance and billing, master data and the approval workflows that tie them together, across about 520 screens.",
+        "Access is role-based down to individual buttons, and the whole interface is localized in English and Gujarati. I work across both ends in a team of 15+, on a React and Vite front-end and a NestJS, Prisma and PostgreSQL back-end.",
+      ],
+      contributions: [
+        "Built 30+ production screens across the Export, Import and Masters modules, including Job Planning Air (a multi-tab form with flight details, cost sheet and document upload), Job Status MIS reports, BL Draft/BL Register, and the Customer, Agent and Consignee masters.",
+        "Built approval workflows (submit, approve, reject, recheck, withdraw) for expense requests and party masters.",
+        "Developed accounts billing APIs in NestJS and Prisma: Export Billing (Air/Sea), Forex, Supplementary, Reimbursement and Combine Billing, plus the LR Register, Bill Register and Vehicle Tyre transport reports.",
+        "Wired RBAC at both screen and button level, mapping backend permission keys to frontend permissions.",
+        "Contributed about 420 commits across frontend and backend, following a feature-based modular architecture, SOLID principles and strict lint and type checks.",
+      ],
+      challenges: [
+        {
+          title: "From proforma to tax invoice",
+          body: "Proforma bills go through a configurable approval matrix on the backend, and the bill is numbered as a tax invoice only once it clears that matrix.",
+        },
+        {
+          title: "Records you can bookmark",
+          body: "Add, edit and view screens moved to URL-based routing with encoded record IDs, so a record can be bookmarked or shared and still be there after a page refresh.",
+        },
+        {
+          title: "Lists that stay in sync",
+          body: "Pagination, search and filtering run on the server through TanStack Query and Table. Cache invalidation is set up so a list refreshes after a write made on a different screen.",
+        },
+        {
+          title: "Data that saves what you meant",
+          body: "Fixed data-integrity bugs: dates shifting across timezones, cleared fields that never cleared on PATCH, edit forms saving with no changes, and duplicate file attachments.",
+        },
+      ],
+      outcomes: [
+        { value: "~520", label: "Screens in the ERP" },
+        { value: "30+", label: "Screens I built" },
+        { value: "~420", label: "Commits" },
       ],
     },
   },
@@ -802,14 +868,19 @@ export const contact = {
 } as const;
 
 /**
- * Résumé content, transcribed from Neel_Bhavsar_Fullstack.pdf.
+ * Résumé content, transcribed from "Neel Bhavsar Fullstack Resume.pdf".
  * This drives /resume — the CV lives in the site as a real page rather than a
  * PDF download, so the Résumé button opens it instead of pulling a file.
+ *
+ * Periods use a spaced em dash ("Apr 2021 — Present"): the page footer splits
+ * on it, so keep the PDF's en dashes out of here.
  */
 export const resume = {
-  title: "Full Stack Developer",
+  title: "Senior Full Stack Developer",
+  /** The stack line under the title, as on the PDF. */
+  headline: ["React", "Node.js", "NestJS", "TypeScript", "PostgreSQL", "AWS"],
   summary:
-    "Full Stack Developer with 5+ years of experience building scalable, high-performance web applications across Streaming, EdTech, Sports, and Rentals domains. Specialised in the MERN stack (MongoDB, Express.js, React, Node.js) with strong command of Next.js, TypeScript, and modern UI development. Skilled in designing RESTful APIs and microservices, translating Figma designs into responsive interfaces, and optimising frontend and backend performance. Reduced API response times by 70% and improved application performance by 80%, with experience leading teams and delivering end-to-end products on AWS.",
+    "Senior Full Stack Developer with 5+ years of experience designing, building and scaling production web applications across ERP and logistics, live streaming, EdTech, sports and rental marketplaces. Strong in React, Next.js and TypeScript on the frontend and Node.js, NestJS and Express on the backend, with data layers on PostgreSQL, MongoDB, MySQL, Neo4j and Redis. Recently built 30+ screens and billing APIs for a 520-screen enterprise logistics ERP (NestJS, Prisma, PostgreSQL). Track record of cutting API response times by 70%, serving 50,000+ users and processing USD 50,000+ in monthly payments. Leads a team of 5 developers through code reviews, mentoring and architecture decisions.",
   /** Set `phone: ""` to keep the number off a public page. */
   contact: {
     location: "Ahmedabad, India",
@@ -819,126 +890,175 @@ export const resume = {
     github: "github.com/neeelbhavsar",
   },
   skills: [
+    { group: "Languages", items: ["TypeScript", "JavaScript (ES6+)", "SQL", "HTML5", "CSS3"] },
     {
       group: "Frontend",
       items: [
-        "React",
+        "React 18",
         "Next.js",
-        "TypeScript",
-        "JavaScript (ES6+)",
-        "HTML5",
-        "CSS3",
+        "Vite",
+        "TanStack Query",
+        "TanStack Table",
+        "React Hook Form",
+        "Zod",
+        "Zustand",
         "Tailwind CSS",
         "Material UI",
         "Responsive Design",
+        "Figma to UI",
       ],
     },
     {
       group: "Backend",
       items: [
         "Node.js",
-        "Express.js",
         "NestJS",
+        "Express.js",
         "RESTful APIs",
+        "GraphQL",
         "Microservices",
-        "WebSockets (Socket.io)",
+        "WebSockets (Socket.IO)",
+        "RBAC",
+        "i18n",
+      ],
+    },
+    { group: "Testing", items: ["Jest", "Supertest", "Unit and API Integration Testing"] },
+    {
+      group: "Databases & ORMs",
+      items: ["PostgreSQL", "MongoDB", "MySQL", "Neo4j", "Redis", "Prisma", "Sequelize"],
+    },
+    { group: "Queues & Messaging", items: ["BullMQ", "Redis Bull", "RabbitMQ"] },
+    {
+      group: "Cloud & DevOps",
+      items: [
+        "AWS (EC2, RDS, S3, SES, Cognito, Secrets Manager)",
+        "Docker",
+        "CI/CD",
+        "GitHub Actions",
+        "Git",
       ],
     },
     {
-      group: "Databases & Data Stores",
-      items: ["MongoDB", "PostgreSQL", "MySQL", "Redis", "Neo4j"],
+      group: "Auth & Security",
+      items: ["JWT", "OAuth 2.0", "Auth0", "AWS Cognito", "Role-Based Access Control"],
     },
-    { group: "Data Access & ORMs", items: ["Prisma", "Sequelize"] },
-    {
-      group: "Cloud & DevOps",
-      items: ["AWS (EC2, RDS, S3, SES, Cognito, Secrets Manager)", "Docker", "CI/CD", "Git"],
-    },
-    { group: "Auth & Security", items: ["Auth0", "AWS Cognito", "JWT", "OAuth 2.0"] },
     {
       group: "Payments & Integrations",
-      items: ["Stripe", "PayPal", "Twilio", "SendGrid", "Firebase"],
+      items: ["Stripe", "PayPal", "Twilio", "SendGrid", "Firebase", "Booqable", "OBS"],
     },
+    { group: "AI Tools", items: ["Cursor", "Claude", "GitHub Copilot", "Codex", "Gemini"] },
     {
-      group: "Practices & Tools",
+      group: "Practices",
       items: [
-        "REST API Design",
-        "Figma-to-UI",
+        "System Design",
+        "SOLID Principles",
+        "Clean Architecture",
+        "Code Reviews",
         "Agile / Scrum",
         "Postman",
-        "RabbitMQ",
-        "Redis Bull",
       ],
     },
   ],
   experience: [
     {
       company: "Artoon Solutions Pvt. Ltd.",
-      role: "Full Stack Developer",
+      role: "Senior Full Stack Developer",
       period: "Apr 2021 — Present",
-      location: "India",
+      location: "Ahmedabad, India",
+      progression: [
+        { title: "Node.js Developer", year: "2021" },
+        { title: "Lead Backend Developer", year: "2024" },
+        { title: "Senior Full Stack Developer", year: "2026" },
+      ],
       bullets: [
-        "Architected and delivered 6 production web applications end-to-end on Node.js and React, with MongoDB, PostgreSQL, MySQL or Neo4j as each product needed, serving 50,000+ active users across multiple platforms.",
-        "Built responsive, component-driven frontends with React, Next.js, and TypeScript, converting Figma designs into pixel-accurate, reusable UI components styled with Tailwind CSS and Material UI.",
-        "Reduced API response times by 70% via strategic database indexing, Redis caching, and background job processing, achieving P95 latency under 250 ms.",
-        "Improved application throughput by 80% through code refactoring and N+1 query elimination, enabling 3x traffic without added infrastructure cost.",
-        "Optimised frontend UI performance using code splitting, lazy loading, and render optimisation to improve perceived load times.",
-        "Developed secure authentication using Auth0 and AWS Cognito, maintaining zero security incidents for 10,000+ users.",
-        "Integrated Stripe and PayPal to process USD 50,000+ in monthly transactions, building both API integration and frontend checkout flows.",
-        "Built real-time features with Socket.io at sub-100 ms notification latency; deployed AWS infrastructure with 99.9% uptime.",
-        "Led a team of 5 developers, conducting code reviews and mentoring junior engineers while aligning delivery with business goals.",
+        "Architected and delivered 7+ production web applications end-to-end across ERP, streaming, EdTech, sports and rentals, serving 50,000+ active users.",
+        "Reduced API response times by 70% through database indexing, Redis caching and background job processing.",
+        "Designed queue-based background processing with Redis Bull/BullMQ and RabbitMQ to move slow work such as emails, payouts and report generation off the request path, with retries for failed jobs.",
+        "Improved API performance by removing N+1 queries and refactoring slow endpoints, handling higher traffic on the same infrastructure.",
+        "Built responsive, component-driven frontends in React, Next.js and TypeScript from Figma designs, using code splitting and lazy loading to speed up load times.",
+        "Integrated Stripe and PayPal to process USD 50,000+ in monthly transactions, covering both payment APIs and frontend checkout flows.",
+        "Implemented secure authentication with Auth0, AWS Cognito and JWT for 10,000+ users with zero security incidents.",
+        "Delivered real-time notifications and chat with Socket.IO, and deployed and maintained production services on AWS (EC2, RDS, S3) with Docker.",
+        "Lead a team of 5 developers: set API and data-modelling standards, run code reviews and mentor junior engineers.",
       ],
     },
   ],
   projects: [
     {
+      name: "ASL ERP",
+      kind: "Logistics and Freight Forwarding ERP Platform",
+      role: "Full Stack Developer",
+      period: "Aug 2026 — Present",
+      stack:
+        "React 18, TypeScript, TanStack Query/Table, Zustand, Tailwind CSS, NestJS, Prisma, PostgreSQL, Redis/BullMQ, AWS S3",
+      bullets: [
+        "Built 30+ production screens across Export, Import and Masters modules of a 520-screen enterprise ERP for air/sea shipments, fleet, finance and billing, with English/Gujarati localization.",
+        "Developed accounts billing APIs in NestJS and Prisma (Export, Forex, Reimbursement, Combine Billing) and approval workflows that route proforma bills through a configurable approval matrix.",
+        "Implemented screen- and button-level RBAC, server-driven pagination with cache invalidation, and contributed 420+ commits in a team of 15+.",
+      ],
+    },
+    {
       name: "Braganza Auto Collezione",
       kind: "Car Rental Platform",
-      period: "Jan 2026 — Present",
+      role: "Full Stack Developer",
+      period: "Jan 2026 — Jul 2026",
+      stack: "Node.js, Express, PostgreSQL, Redis, React, Next.js, WebSockets, AWS, Booqable",
       bullets: [
-        "Built end-to-end on Node.js, Express and PostgreSQL with a React and Next.js frontend, for a marketplace managing 200+ vehicles.",
-        "Developed responsive UI from Figma designs; booking interface reduced customer support tickets by 40%. Integrated Booqable and real-time WebSocket booking updates.",
+        "Owned the architecture of a rental marketplace managing 200+ vehicles, from the Express and PostgreSQL core with Redis caching on AWS to the React/Next.js booking interface.",
+        "Designed a vehicle ownership domain layer and planned a staged database migration that moved data in phases instead of one cutover, shipping the M1 release while keeping availability, pricing and fleet state consistent.",
+        "Built a responsive booking UI from Figma with real-time WebSocket updates and Booqable integration, reducing customer support tickets by 40%.",
       ],
     },
     {
       name: "Streamerdap",
       kind: "Live Streaming Platform",
+      role: "Backend Lead",
       period: "Jul 2025 — Jan 2026",
+      stack: "Node.js, Express, Sequelize, PayPal, OBS, Redis, AWS",
       bullets: [
-        "Developed backend supporting 500+ concurrent streamers; built a PayPal payout system processing 5,000+ weekly payouts at 99.5% accuracy.",
-        "Optimised database performance, reducing dashboard load times by 55% during peak traffic.",
+        "Built the backend for a browser-based live streaming platform with OBS browser-source support, supporting 500+ concurrent streamers.",
+        "Built PayPal subscriptions, plan-gated features and a payout system processing 5,000+ weekly payouts at 99.5% accuracy, delivered with zero bugs at handover.",
+        "Optimised database queries, reducing dashboard load times by 55% during peak traffic.",
       ],
     },
     {
       name: "Jolt",
-      kind: "CMS & Film Streaming Platform",
+      kind: "CMS and Film Streaming Platform",
+      role: "Backend Lead",
       period: "Mar 2025 — Jul 2025",
+      stack: "Node.js, Express, MongoDB, Auth0, AWS S3",
       bullets: [
-        "Architected a dual-purpose CMS and streaming platform with media uploads and controlled publishing workflows, using scalable AWS S3 pipelines.",
+        "Architected a dual-purpose catalogue CMS and public film-streaming product on a single backend, with media uploads through scalable AWS S3 pipelines and controlled publishing workflows.",
       ],
     },
     {
       name: "SpingR",
       kind: "Professional Networking Platform",
+      role: "Backend Lead",
       period: "Jul 2024 — Feb 2025",
+      stack: "Node.js, Express, Neo4j, MongoDB, Redis, RabbitMQ",
       bullets: [
-        "Implemented graph-based relationship discovery with Neo4j (sub-200 ms queries across 100,000+ nodes); built a digital business card platform and real-time chat for 10,000+ professionals.",
+        "Implemented graph-based relationship discovery in Neo4j with sub-200 ms queries across 100,000+ nodes; built digital business cards and real-time chat for 10,000+ professionals.",
       ],
     },
     {
       name: "iMentor",
       kind: "EdTech Mentorship Platform",
+      role: "Full Stack Developer",
       period: "Aug 2023 — Jun 2024",
+      stack: "Node.js, TypeScript, React, MongoDB, Redis, AWS, Socket.IO",
       bullets: [
-        "Architected a CMS-driven platform across 3 educational institutions; designed an automated mentor–mentee matching algorithm improving satisfaction scores by 35%.",
+        "Architected a multi-role, CMS-driven platform used by 3 educational institutions; designed an automated mentor–mentee matching algorithm that raised satisfaction scores by 35%, with built-in chat.",
       ],
     },
     {
       name: "Diamond Connect",
-      kind: "Sports Tournament Platform",
-      period: "2021 — 2023",
+      kind: "Baseball Tournament Management App",
+      role: "Backend Developer",
+      period: "Apr 2021 — Jul 2023",
+      stack: "Node.js, Express, MongoDB, Redis, RabbitMQ, Stripe, Socket.IO",
       bullets: [
-        "Built the backend for a cross-platform youth baseball tournament system — MongoDB schema, Express REST API, and a scheduling engine generating brackets and game slots from team counts, field availability and rest windows.",
-        "Integrated Stripe for registration fees with idempotent, webhook-confirmed enrolment so retried events never double-register a team; built the event-management and CMS layer serving a single API to every client platform.",
+        "Built backend services for a cross-platform tournament app covering team registration, Stripe payments, automated match scheduling and live scores.",
       ],
     },
   ],
