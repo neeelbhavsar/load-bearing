@@ -3,8 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
-import { projects, profile } from "@/content/portfolio";
+import { engagementLabel, projects, profile } from "@/content/portfolio";
 import { JsonLd } from "@/components/json-ld";
+import { ArchitectureDiagram } from "@/components/architecture-diagram";
 import { projectGraph } from "@/lib/structured-data";
 
 /**
@@ -136,9 +137,19 @@ export default async function ProjectPage({
             <dd className="text-fg-muted">{project.role}</dd>
           </div>
           <div className="flex gap-2">
-            <dt className="text-fg-faint">Year</dt>
-            <dd className="text-fg-muted">{project.year}</dd>
+            <dt className="text-fg-faint">Period</dt>
+            <dd className="text-fg-muted">{project.period}</dd>
           </div>
+          <div className="flex gap-2">
+            <dt className="text-fg-faint">Delivered as</dt>
+            <dd className="text-fg-muted">{engagementLabel[project.engagement]}</dd>
+          </div>
+          {project.ownership?.team && (
+            <div className="flex gap-2">
+              <dt className="text-fg-faint">Team</dt>
+              <dd className="text-fg-muted">{project.ownership.team}</dd>
+            </div>
+          )}
           {project.metric && (
             <div className="flex gap-2">
               <dt className="text-fg-faint">Impact</dt>
@@ -160,6 +171,20 @@ export default async function ProjectPage({
         />
       </div>
 
+      {/* Full width, above the two columns: four boxes in a row need the
+          room, and the diagram is the quickest read on the page. */}
+      {project.architecture && (
+        <div className="mt-14">
+          <Section label="Architecture" first>
+            <ArchitectureDiagram
+              architecture={project.architecture}
+              accent={project.accent}
+              title={project.title}
+            />
+          </Section>
+        </div>
+      )}
+
       <div className="mt-14 grid gap-14 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
         <div>
           <Section label="Overview" first>
@@ -171,6 +196,31 @@ export default async function ProjectPage({
               ))}
             </div>
           </Section>
+
+          {project.ownership && (
+            <Section label="My role">
+              {project.ownership.scope && (
+                <p className="max-w-[75ch] leading-relaxed text-fg">
+                  {project.role} · {project.ownership.scope}
+                </p>
+              )}
+              <h3 className="mt-5 font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
+                Decisions I owned
+              </h3>
+              <ul className="mt-3 space-y-3">
+                {project.ownership.decisions.map((item) => (
+                  <li key={item} className="flex gap-3 text-[15px] leading-relaxed text-fg-muted">
+                    <span
+                      aria-hidden
+                      className="mt-[0.6em] size-1.5 shrink-0 rounded-full"
+                      style={{ background: project.accent }}
+                    />
+                    <span className="max-w-[75ch]">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )}
 
           <Section label="What I built">
             <ul className="space-y-3">
@@ -261,6 +311,17 @@ export default async function ProjectPage({
                 {project.linkNote ?? "No public URL."}
               </p>
             )}
+            {project.repo && (
+              <a
+                href={project.repo}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="mt-3 flex items-center gap-2 font-mono text-[11px] tracking-[0.18em] text-fg-muted uppercase transition-colors duration-300 hover:text-accent"
+              >
+                Source on GitHub
+                <ArrowUpRight size={14} aria-hidden />
+              </a>
+            )}
           </Section>
         </div>
       </div>
@@ -304,7 +365,7 @@ export default async function ProjectPage({
           data-cursor="talk"
           className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 font-mono text-[11px] tracking-[0.2em] text-on-accent uppercase transition-transform duration-300 hover:-translate-y-0.5"
         >
-          Start a project
+          Hire me
           <ArrowUpRight size={14} aria-hidden />
         </Link>
       </nav>

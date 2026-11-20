@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
-import { useRef } from "react";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { Fragment, useRef } from "react";
+import { ArrowDown, ArrowUpRight, Download } from "lucide-react";
 import { profile } from "@/content/portfolio";
 import { RevealText } from "@/components/motion-primitives";
 import { useMediaQuery } from "@/lib/use-media-query";
@@ -52,16 +52,16 @@ export function Hero() {
         {/* ── type column ── */}
         <motion.div style={parallax ? { y: typeY } : undefined} className="order-2 lg:order-1">
           <motion.p
-            className="flex items-center gap-3 font-mono text-[11px] tracking-[0.24em] text-fg-faint uppercase"
+            className="flex items-center gap-3 font-mono text-[11px] leading-relaxed tracking-[0.18em] text-fg uppercase sm:tracking-[0.22em]"
             initial={reduced ? undefined : { y: 10 }}
             animate={reduced ? undefined : { y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className="relative flex h-1.5 w-1.5">
+            <span className="relative flex h-1.5 w-1.5 shrink-0">
               <span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-70" />
               <span className="relative h-1.5 w-1.5 rounded-full bg-accent" />
             </span>
-            {profile.availability}
+            <span>{profile.availability}</span>
           </motion.p>
 
           <h1
@@ -71,6 +71,9 @@ export function Hero() {
             <span className="block text-[clamp(3rem,9vw,7.5rem)]">
               <RevealText text={profile.firstName} stagger={0.06} />
             </span>
+            {/* The two names sit on separate block lines, which shows a gap
+                visually but none in the text — crawlers read "NeelBhavsar".
+                A plain space between the blocks costs nothing in layout. */}{" "}
             <span className="block text-[clamp(3rem,9vw,7.5rem)] text-fg-muted italic">
               <RevealText text={profile.lastName} delay={0.1} stagger={0.06} />
             </span>
@@ -95,7 +98,27 @@ export function Hero() {
               <span className="text-fg-faint">{profile.location}</span>
             </p>
 
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-fg-muted sm:mt-7 sm:text-xl">
+            {/* Impact first: the numbers a recruiter is scanning for, in one
+                line, before any prose. */}
+            <p className="mt-4 text-sm leading-relaxed text-fg sm:text-base">
+              {/* Inline flow, not flex: flex drops the whitespace text nodes,
+                  and the extracted line would read "5+ yrs·NestJS". */}
+              {profile.impact.map((fact, i) => (
+                <Fragment key={fact}>
+                  {i > 0 && (
+                    <>
+                      {" "}
+                      <span aria-hidden className="mx-1 text-accent">
+                        ·
+                      </span>{" "}
+                    </>
+                  )}
+                  <span className="whitespace-nowrap">{fact}</span>
+                </Fragment>
+              ))}
+            </p>
+
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-fg-muted sm:mt-6 sm:text-xl">
               {profile.tagline}
             </p>
 
@@ -114,12 +137,26 @@ export function Hero() {
                   className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 />
               </a>
+              {/* A real file, for HR teams that need something to forward or
+                  upload — the /resume page is for reading. */}
+              <a
+                href={profile.resumePdfUrl}
+                download={profile.resumePdfName}
+                className="group inline-flex items-center justify-center gap-2 rounded-full border border-border-strong px-6 py-4 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent sm:py-3.5"
+              >
+                Download résumé
+                <Download
+                  size={14}
+                  aria-hidden
+                  className="transition-transform duration-300 group-hover:translate-y-0.5"
+                />
+              </a>
               <a
                 href="#contact"
                 data-cursor="talk"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-border-strong px-6 py-4 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent sm:py-3.5"
+                className="inline-flex items-center justify-center gap-2 rounded-full px-4 py-3 font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase underline decoration-border-strong underline-offset-4 transition-colors duration-300 hover:text-accent sm:py-3.5"
               >
-                Get in touch
+                Hire me
               </a>
             </div>
 
@@ -139,6 +176,14 @@ export function Hero() {
                 </dt>
                 <dd className="mt-1.5 font-display text-xl tracking-tight sm:text-2xl">
                   {profile.company}
+                </dd>
+              </div>
+              <div>
+                <dt className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
+                  Promoted {profile.promotion.year}
+                </dt>
+                <dd className="mt-1.5 font-display text-xl tracking-tight sm:text-2xl">
+                  {profile.promotion.title}
                 </dd>
               </div>
             </dl>

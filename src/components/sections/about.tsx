@@ -86,13 +86,18 @@ function Word({
     // from data-word rather than a second span: aria-hidden keeps a duplicate
     // from screen readers, but crawlers and text extractors read it anyway, and
     // the paragraph came out as "I I help help teams teams".
-    <span
-      data-word={children}
-      className="relative mr-[0.28em] inline-block before:absolute before:inset-0 before:opacity-15 before:content-[attr(data-word)]"
-    >
-      {/* Reduced motion: fully lit, no scroll coupling. */}
-      <motion.span style={reduced ? undefined : { opacity }}>{children}</motion.span>
-    </span>
+    //
+    // The gap is a real space after the span, not a margin: with margin alone
+    // the extracted text read "Ihelpteams".
+    <>
+      <span
+        data-word={children}
+        className="relative inline-block before:absolute before:inset-0 before:opacity-15 before:content-[attr(data-word)]"
+      >
+        {/* Reduced motion: fully lit, no scroll coupling. */}
+        <motion.span style={reduced ? undefined : { opacity }}>{children}</motion.span>
+      </span>{" "}
+    </>
   );
 }
 

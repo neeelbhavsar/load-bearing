@@ -22,13 +22,38 @@ export const profile = {
    */
   role: "Senior Full Stack Developer",
   tagline: "I build robust, scalable systems that quietly carry real products.",
-  location: "Ahmedabad, India · Remote-friendly",
-  availability: "Available for Selected Work",
+  location: "Ahmedabad, India · Remote worldwide",
+  /**
+   * The hero badge. Says plainly that this is a job search, not freelance
+   * cherry-picking ("Available for Selected Work" read as the latter).
+   */
+  availability: "Open to Senior Full Stack / Backend roles · Immediate joiner",
+  /** Job-search facts, reused by the hero, contact section, résumé and PDF. */
+  jobSearch: {
+    roles: "Senior Full Stack / Backend roles",
+    noticePeriod: "Immediate",
+    workPreference: "remote work from anywhere, worldwide",
+  },
+  /**
+   * One-line impact summary under the name. Every figure here is one the
+   * résumé and the About stats already carry.
+   */
+  impact: [
+    "5+ yrs",
+    "NestJS / Node.js",
+    "Systems serving 50k+ users",
+    "$50k a month in payments",
+  ],
+  /** The promotion is the strongest seniority signal, so the hero names it. */
+  promotion: { title: "Lead Backend Developer", year: "2024" },
   yearsExperience: "5+",
   company: "Artoon Solutions Pvt. Ltd.",
   email: "neelbhavsar124@gmail.com",
-  // The résumé is a page in this site, not a file to download — see /resume.
+  // The résumé is a page (/resume) and also an ATS-friendly PDF built from the
+  // same data (/resume.pdf), for HR teams that need a file to forward.
   resumeUrl: "/resume",
+  resumePdfUrl: "/resume.pdf",
+  resumePdfName: "Neel-Bhavsar-Senior-Full-Stack-Developer-Resume.pdf",
   socials: [
     { label: "GitHub", href: "https://github.com/neeelbhavsar" },
     { label: "LinkedIn", href: "https://linkedin.com/in/neeelbhavsar" },
@@ -119,7 +144,7 @@ export const about = {
    * the site; keep it that way when the résumé changes.
    */
   brief:
-    "Neel Bhavsar is a senior full stack developer based in Ahmedabad, India, with 5+ years building production web applications. He has been at Artoon Solutions since April 2021, where he works across the stack: React and Next.js front-ends on Node.js, Express and NestJS APIs, with MongoDB, PostgreSQL, MySQL, Neo4j and Redis chosen to fit each product. His work includes 30+ screens and billing APIs for a 520-screen logistics ERP, a car rental platform managing 200+ vehicles, a live streaming platform supporting 500+ concurrent streamers with PayPal subscriptions and payouts, and Stripe and PayPal integrations handling USD 50,000+ a month. He has cut API response times by 70% through indexing and Redis caching, and leads a team of five developers.",
+    "Neel Bhavsar is a senior full stack developer based in Ahmedabad, India, with 5+ years building production web applications. He has been at Artoon Solutions since April 2021, where he works across the stack: React and Next.js front-ends on Node.js, Express and NestJS APIs, with MongoDB, PostgreSQL, MySQL, Neo4j and Redis chosen to fit each product. His work includes 30+ screens and billing APIs for a 520-screen logistics ERP, a car rental platform managing 200+ vehicles, a live streaming platform supporting 500+ concurrent streamers with PayPal subscriptions and payouts, and Stripe and PayPal integrations handling USD 50,000+ a month. He has cut API response times by 70% through indexing and Redis caching, was promoted to Lead Backend Developer in 2024, and leads a team of five developers. He is open to senior full stack and backend roles and can join immediately.",
   paragraphs: [
     "I help teams turn business requirements into production-ready software — secure APIs, real-time services, and well-modeled data behind clean React front-ends.",
     "Senior full stack developer with 5+ years building web applications: React front-ends, robust RESTful APIs, secure auth flows, and databases tuned for performance and reliability. I work across relational, document and graph stores — MongoDB, MySQL, PostgreSQL, Neo4j and Redis — with a focus on efficient data modeling in polyglot architectures.",
@@ -193,7 +218,10 @@ export const experience = {
     {
       year: "2024",
       title: "Lead Backend Developer",
-      body: "Led backend work across content, networking and streaming platforms: SpingR digital business cards with Neo4j graph-based networking, Jolt as a dual CMS + public film-streaming product on MongoDB and Auth0, and the Streamerdap pipeline that lets creators go live from OBS with PayPal billing. Modeled polyglot data across MongoDB, MySQL and Neo4j.",
+      // Rendered as a badge: the promotion is the clearest seniority signal on
+      // the page, so it should not read as just another row.
+      milestone: "Promoted",
+      body: "Promoted to own backend delivery across content, networking and streaming platforms: SpingR digital business cards with Neo4j graph-based networking, Jolt as a dual CMS + public film-streaming product on MongoDB and Auth0, and the Streamerdap pipeline that lets creators go live from OBS with PayPal billing. Modeled polyglot data across MongoDB, MySQL and Neo4j.",
       tags: ["Node.js", "Neo4j", "MongoDB", "MySQL", "Video Streaming", "Auth0"],
     },
     {
@@ -217,12 +245,51 @@ export type Project = {
    */
   seoDescription?: string;
   role: string;
+  /** Four-digit year, machine-readable (schema.org dateCreated, OG image). */
   year: string;
+  /**
+   * What visitors see: "Mon YYYY — Mon YYYY", matching the résumé periods.
+   * A bare year next to the card index read as "202602" to text extractors.
+   */
+  period: string;
+  /**
+   * Client work delivered as an Artoon employee, or a personal project. Said
+   * on every card so overlapping dates never read as moonlighting.
+   */
+  engagement: "artoon-client" | "personal";
+  /**
+   * Stack, most recruiter-relevant first. Every entry is shown — a "+3" chip
+   * hid exactly the keywords people scan for.
+   */
   stack: readonly string[];
   ai?: string;
   metric?: string;
   image: string;
   href?: string;
+  /** Public source repository, when there is one. */
+  repo?: string;
+  /**
+   * What I owned on the project, beyond the feature list. Only facts that are
+   * true go here: leave `team` out rather than guess a number.
+   */
+  ownership?: {
+    /** e.g. "Team of 15+ engineers". */
+    team?: string;
+    /** My scope inside it, e.g. "30+ of ~520 screens". */
+    scope?: string;
+    /** Technical decisions I made and answered for. */
+    decisions: readonly string[];
+  };
+  /**
+   * Request path through the system, drawn as a diagram on the case study.
+   * `flow` is the main path left to right; `aside` holds the supporting
+   * services hanging off it (queues, caches, storage, third parties).
+   */
+  architecture?: {
+    flow: readonly ArchNode[];
+    aside?: readonly ArchNode[];
+    caption: string;
+  };
   /** Shown in the modal in place of the visit button when there's no public URL. */
   linkNote?: string;
   accent: string;
@@ -241,6 +308,18 @@ export type Project = {
   };
 };
 
+export type ArchNode = {
+  name: string;
+  tech: string;
+  note?: string;
+};
+
+/** Visible label for each engagement type. */
+export const engagementLabel: Record<Project["engagement"], string> = {
+  "artoon-client": "Client project · delivered at Artoon Solutions",
+  personal: "Personal project",
+};
+
 export const projects: readonly Project[] = [
   {
     slug: "ai-library",
@@ -251,12 +330,36 @@ export const projects: readonly Project[] = [
       "An auto-updating directory of AI Skills, MCP servers and GitHub repos, with copy-paste setup instructions generated for Claude, Cursor, Codex, Windsurf, Cline and VS Code. A daily GitHub Actions cron refreshes the catalogue — no database, no server to babysit.",
     role: "Creator · full stack",
     year: "2026",
+    period: "Jul 2026 — Present",
+    engagement: "personal",
     stack: ["Next.js 16", "TypeScript", "Tailwind v4", "Motion", "GitHub Actions"],
     ai: "Generates per-assistant install and usage snippets from the MCP Registry, Glama and the GitHub Search API",
     metric: "Refreshed daily, fully static",
     image:
       "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1600&auto=format&fit=crop",
-    href: "https://mcp-skills-hub.netlify.app",
+    // The Netlify deploy is gone (404); Vercel is the live one, and the one the
+    // repo's own homepage field points at.
+    href: "https://mcp-skills-hub.vercel.app",
+    repo: "https://github.com/neeelbhavsar/mcp-skills-hub",
+    ownership: {
+      team: "Solo",
+      scope: "Product, data pipeline, UI and deploy",
+      decisions: [
+        "Build-time static data instead of a database, so there is no runtime to keep alive.",
+        "A single canonical server record, rendered into six assistant-specific install formats.",
+        "A daily GitHub Actions cron as the only moving part, kept inside the free-tier limits.",
+      ],
+    },
+    architecture: {
+      flow: [
+        { name: "Sources", tech: "MCP Registry · Glama · GitHub Search", note: "Pulled daily" },
+        { name: "Ingest", tech: "GitHub Actions cron", note: "Normalise · de-dupe" },
+        { name: "Dataset", tech: "Committed JSON", note: "Triggers rebuild" },
+        { name: "Site", tech: "Next.js 16 static export", note: "No server" },
+      ],
+      caption:
+        "The catalogue is rebuilt once a day by a cron and shipped as static files, so the live site has no backend at all.",
+    },
     accent: "#7CFFB2",
     detail: {
       kicker: "A self-updating catalogue of the AI tooling ecosystem",
@@ -300,20 +403,46 @@ export const projects: readonly Project[] = [
       "An enterprise ERP for logistics and freight forwarding, with about 520 screens covering air and sea export and import, transport and fleet, finance and billing, masters and approval workflows, plus role-based access and English and Gujarati localization.",
     role: "Full stack",
     year: "2026",
+    period: "Aug 2026 — Present",
+    engagement: "artoon-client",
     stack: [
+      "NestJS",
+      "PostgreSQL",
+      "Prisma",
+      "Redis/BullMQ",
       "React 18",
       "TypeScript",
-      "NestJS",
-      "Prisma",
-      "PostgreSQL",
       "TanStack Query",
-      "Redis/BullMQ",
+      "AWS S3",
       "Tailwind CSS",
     ],
     metric: "~520-screen ERP · 30+ screens shipped",
     image:
       "https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=1600&auto=format&fit=crop",
     linkNote: "Internal enterprise system, so there's no public URL",
+    ownership: {
+      team: "Team of 15+ engineers",
+      scope: "30+ of ~520 screens · ~420 commits · billing APIs",
+      decisions: [
+        "Moved add, edit and view screens to URL-based routing with encoded record IDs, so records survive a refresh and can be shared.",
+        "Mapped backend permission keys to screen- and button-level frontend permissions for RBAC.",
+        "Implemented server-driven pagination with cache invalidation, so lists refresh after writes made on other screens.",
+      ],
+    },
+    architecture: {
+      flow: [
+        { name: "Client", tech: "React 18 · Vite", note: "TanStack Query · Zustand" },
+        { name: "API", tech: "NestJS", note: "RBAC guards · approval matrix" },
+        { name: "ORM", tech: "Prisma", note: "Typed queries · migrations" },
+        { name: "Database", tech: "PostgreSQL", note: "Masters · jobs · billing" },
+      ],
+      aside: [
+        { name: "Queue", tech: "Redis · BullMQ", note: "Reports and background jobs" },
+        { name: "Storage", tech: "AWS S3", note: "Shipment documents" },
+      ],
+      caption:
+        "Requests go from the React client to NestJS, where permission guards and the approval matrix run before Prisma writes to PostgreSQL. Slow work goes to BullMQ, and documents are stored in S3.",
+    },
     accent: "#FF9BD2",
     detail: {
       kicker: "Freight forwarding, from job planning to tax invoice",
@@ -362,11 +491,48 @@ export const projects: readonly Project[] = [
       "A full-stack car rental platform where users discover, book and rent vehicles through a secure, scalable system — availability, pricing and fleet state all consistent under load.",
     role: "Full stack",
     year: "2026",
-    stack: ["Node.js", "Express", "React", "Next.js", "TypeScript", "PostgreSQL", "Redis", "AWS"],
+    period: "Jan 2026 — Jul 2026",
+    engagement: "artoon-client",
+    stack: [
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "Redis",
+      "AWS",
+      "TypeScript",
+      "React",
+      "Next.js",
+      "WebSockets",
+      "Booqable",
+    ],
     metric: "200+ vehicles · 40% fewer support tickets",
     image:
       "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1600&auto=format&fit=crop",
     href: "https://www.braganzaclub.com",
+    ownership: {
+      scope: "Architecture end to end, API to booking UI to AWS deploy",
+      decisions: [
+        "Serialised concurrent checkouts with a transaction and row-level lock on the vehicle, so double bookings cannot happen.",
+        "Cached availability in Redis by fleet segment and window, with targeted invalidation instead of wholesale flushes.",
+        "Planned the staged phase-2 migration as idempotent transactions, so a failed deploy rolls back cleanly instead of half-applying.",
+        "Kept pricing server-side only, so the quote a customer sees is always the amount charged.",
+      ],
+    },
+    architecture: {
+      flow: [
+        { name: "Client", tech: "Next.js · React", note: "Booking flow · admin" },
+        { name: "API", tech: "Node.js · Express", note: "Pricing rules · bookings" },
+        { name: "Database", tech: "PostgreSQL", note: "Row-level locks" },
+      ],
+      aside: [
+        { name: "Cache", tech: "Redis", note: "Availability windows" },
+        { name: "Realtime", tech: "WebSockets", note: "Live fleet state" },
+        { name: "Integration", tech: "Booqable", note: "Rental operations" },
+        { name: "Hosting", tech: "AWS", note: "Production deploy" },
+      ],
+      caption:
+        "A booking takes a row lock on the vehicle inside one PostgreSQL transaction. Availability reads come from Redis, which is invalidated precisely when a booking touches that window.",
+    },
     accent: "#5BE9FF",
     detail: {
       kicker: "Car rental at scale — availability that never lies",
@@ -413,11 +579,37 @@ export const projects: readonly Project[] = [
       "A web-based live streaming platform that lets creators go live straight from the OBS Browser source, with PayPal-backed subscriptions and plan-gated features.",
     role: "Backend lead",
     year: "2025",
-    stack: ["Node.js", "MySQL", "Sequelize", "PayPal API", "OBS"],
+    period: "Jul 2025 — Jan 2026",
+    engagement: "artoon-client",
+    stack: ["Node.js", "Express", "MySQL", "Sequelize", "Redis", "AWS", "PayPal API", "OBS"],
     metric: "500+ concurrent streamers · 5,000+ weekly payouts",
     image:
       "https://images.unsplash.com/photo-1598550476439-6847785fcea6?q=80&w=1600&auto=format&fit=crop",
     href: "https://www.streamerdap.com",
+    ownership: {
+      // TODO: add `team` (e.g. "Led 3 developers") once confirmed — not guessed.
+      scope: "Backend lead: schema, API, PayPal billing and payouts",
+      decisions: [
+        "Authenticated the OBS browser source with signed, scoped, revocable URL tokens instead of a login screen.",
+        "Applied PayPal webhooks idempotently against a stored subscription state machine, so replays never grant extra time.",
+        "Resolved entitlements server-side on every request, so a downgrade applies mid-stream without a reconnect.",
+      ],
+    },
+    architecture: {
+      flow: [
+        { name: "Client", tech: "OBS browser source · web app", note: "Token in URL" },
+        { name: "API", tech: "Node.js · Express", note: "Entitlement checks" },
+        { name: "ORM", tech: "Sequelize", note: "Plans · channels" },
+        { name: "Database", tech: "MySQL", note: "Subscription state" },
+      ],
+      aside: [
+        { name: "Payments", tech: "PayPal", note: "Webhooks · 5,000+ weekly payouts" },
+        { name: "Cache", tech: "Redis", note: "Hot dashboard reads" },
+        { name: "Hosting", tech: "AWS", note: "Production" },
+      ],
+      caption:
+        "OBS loads a signed URL, the API checks the creator's plan on every request, and PayPal webhooks drive a subscription state machine stored in MySQL.",
+    },
     accent: "#4F9BFF",
     detail: {
       kicker: "Go live from OBS — no desktop app, no plugin",
@@ -460,11 +652,35 @@ export const projects: readonly Project[] = [
       "A dual-purpose platform: a CMS for the team that publishes the catalogue, and a public film-streaming interface for everyone watching it.",
     role: "Backend lead",
     year: "2025",
-    stack: ["Node.js", "Express", "MongoDB", "Video Streaming", "CMS", "Auth0"],
+    period: "Mar 2025 — Jul 2025",
+    engagement: "artoon-client",
+    stack: ["Node.js", "Express", "MongoDB", "Auth0", "AWS S3", "Video Streaming", "CMS"],
     metric: "One backend, two products",
     image:
       "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1600&auto=format&fit=crop",
     href: "https://www.jolt.film",
+    ownership: {
+      // TODO: add `team` once confirmed — not guessed.
+      scope: "Backend lead for both the CMS and the public streaming site",
+      decisions: [
+        "Served both products from one MongoDB catalogue, with visibility enforced through separate read models at the query layer.",
+        "Mapped Auth0 token roles onto the API's own permission layer, so viewer sessions can never reach CMS routes.",
+        "Delivered video over HTTP range requests for seek-friendly playback, and decoupled encoding from the request cycle.",
+      ],
+    },
+    architecture: {
+      flow: [
+        { name: "Clients", tech: "Editorial CMS · public player", note: "Two surfaces" },
+        { name: "API", tech: "Node.js · Express", note: "Per-surface read models" },
+        { name: "Database", tech: "MongoDB", note: "One catalogue" },
+      ],
+      aside: [
+        { name: "Identity", tech: "Auth0", note: "Roles from the token" },
+        { name: "Media", tech: "AWS S3", note: "Uploads · range requests" },
+      ],
+      caption:
+        "Editors and viewers use the same API and the same catalogue. Each surface reads through its own model, so drafts never reach the public side.",
+    },
     accent: "#C08BFF",
     detail: {
       kicker: "One backend serving a CMS and a streaming front-end",
@@ -511,11 +727,36 @@ export const projects: readonly Project[] = [
       "Design, share and manage digital business cards — with graph-based networking in Neo4j so a connection two hops away is a query, not a guess.",
     role: "Backend lead",
     year: "2024",
-    stack: ["Node.js", "Neo4j", "MongoDB", "WebSockets", "JWT"],
+    period: "Jul 2024 — Feb 2025",
+    engagement: "artoon-client",
+    stack: ["Node.js", "Express", "Neo4j", "MongoDB", "Redis", "RabbitMQ", "WebSockets", "JWT"],
     metric: "10,000+ professionals · sub-200ms across 100k+ nodes",
     image:
       "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=1600&auto=format&fit=crop",
     linkNote: "Shipped as a mobile application — no public web URL",
+    ownership: {
+      // TODO: add `team` once confirmed — not guessed.
+      scope: "Backend lead: data model, graph queries, auth and realtime",
+      decisions: [
+        "Chose the polyglot split: Neo4j for relationships, MongoDB for card content and media.",
+        "Ordered cross-database writes and added a reconciliation pass that repairs orphaned graph nodes.",
+        "Capped traversal depth and indexed relationship types to keep suggestions under 200 ms across 100k+ nodes.",
+      ],
+    },
+    architecture: {
+      flow: [
+        { name: "Client", tech: "Mobile app", note: "Cards · scans · chat" },
+        { name: "API", tech: "Node.js · Express", note: "JWT · WebSockets" },
+        { name: "Graph", tech: "Neo4j", note: "Connections · 2-hop paths" },
+        { name: "Documents", tech: "MongoDB", note: "Card content · media" },
+      ],
+      aside: [
+        { name: "Queue", tech: "RabbitMQ", note: "Async notifications" },
+        { name: "Cache", tech: "Redis", note: "Hot lookups" },
+      ],
+      caption:
+        "Card content lives in MongoDB and the connection graph lives in Neo4j. A graph edge is written only after its card record commits.",
+    },
     accent: "#B4FF39",
     detail: {
       kicker: "Digital business cards backed by a real social graph",
@@ -559,7 +800,20 @@ export const projects: readonly Project[] = [
       "A CMS-driven educational platform with multi-role admin support, automated mentor–mentee matching and built-in chat, so a pair can talk without leaving the programme.",
     role: "Full stack",
     year: "2023",
-    stack: ["Node.js", "Express", "React", "Next.js", "MongoDB", "CMS", "Socket.io"],
+    period: "Aug 2023 — Jun 2024",
+    engagement: "artoon-client",
+    stack: [
+      "Node.js",
+      "Express",
+      "TypeScript",
+      "MongoDB",
+      "Redis",
+      "AWS",
+      "React",
+      "Next.js",
+      "Socket.io",
+      "CMS",
+    ],
     metric: "3 institutions · 35% higher satisfaction",
     image:
       "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop",
@@ -611,8 +865,10 @@ export const projects: readonly Project[] = [
     blurb:
       "A cross-platform app for running baseball tournaments end to end — team registration, Stripe payments, automated scheduling and scores from the field.",
     role: "Backend developer",
-    year: "2021 — 2023",
-    stack: ["Node.js", "Express", "MongoDB", "CMS", "Stripe", "Cross-platform", "Event Management"],
+    year: "2021",
+    period: "Jul 2021 — Jul 2023",
+    engagement: "artoon-client",
+    stack: ["Node.js", "Express", "MongoDB", "Redis", "RabbitMQ", "Stripe", "Socket.io", "CMS"],
     metric: "Automated scheduling",
     image:
       "https://images.unsplash.com/photo-1566577739112-5180d4bf9390?q=80&w=1600&auto=format&fit=crop",
@@ -850,7 +1106,7 @@ export function hasVisibleTestimonials() {
 export const contact = {
   heading: "Contact",
   intro:
-    "Have a backend that needs architecting, a real-time feature that has to hold up, or a product that needs shipping end to end? Tell me about it.",
+    "Hiring for a senior full stack or backend role? I'm available to join immediately and work remotely from anywhere, for teams worldwide. Send the role, or tell me about the backend that needs building.",
   /**
    * The form has no server. On submit it composes a mail draft to profile.email.
    * To take submissions server-side instead, set this to your form endpoint
@@ -859,11 +1115,12 @@ export const contact = {
   formEndpoint: "", // TODO optional: e.g. "https://formspree.io/f/xxxxxxx"
   details: [
     { label: "Email", value: "neelbhavsar124@gmail.com" },
-    { label: "Based in", value: "Ahmedabad, India · Remote-friendly" },
+    { label: "Currently", value: "Open to Senior Full Stack / Backend roles" },
+    { label: "Notice period", value: "Immediate joiner" },
+    { label: "Location", value: "Remote, worldwide · based in Ahmedabad, India" },
     // Timezone only — no promised overlap windows with other regions.
     { label: "Timezone", value: "IST (UTC+5:30)" },
     { label: "Response time", value: "Within 24 hours" },
-    { label: "Currently", value: "Available for Selected Work" },
   ],
 } as const;
 
@@ -877,6 +1134,10 @@ export const contact = {
  */
 export const resume = {
   title: "Senior Full Stack Developer",
+  /** Shown in the page footer and stamped into the PDF. Bump on every edit. */
+  updated: "Nov 2026",
+  /** Availability line under the contact details, on the page and the PDF. */
+  availability: `Notice period: ${profile.jobSearch.noticePeriod} · Open to ${profile.jobSearch.workPreference}`,
   /** The stack line under the title, as on the PDF. */
   headline: ["React", "Node.js", "NestJS", "TypeScript", "PostgreSQL", "AWS"],
   summary:
@@ -967,7 +1228,7 @@ export const resume = {
       location: "Ahmedabad, India",
       progression: [
         { title: "Node.js Developer", year: "2021" },
-        { title: "Lead Backend Developer", year: "2024" },
+        { title: "Lead Backend Developer", year: "2024", promoted: true },
         { title: "Senior Full Stack Developer", year: "2026" },
       ],
       bullets: [
@@ -983,6 +1244,12 @@ export const resume = {
       ],
     },
   ],
+  /**
+   * Every entry below was delivered as an Artoon employee for an Artoon
+   * client; the page and PDF say so above the list, so dates that overlap the
+   * Artoon role read as what they are rather than as side work.
+   */
+  projectsNote: "Client projects delivered at Artoon Solutions",
   projects: [
     {
       name: "ASL ERP",
@@ -1055,10 +1322,23 @@ export const resume = {
       name: "Diamond Connect",
       kind: "Baseball Tournament Management App",
       role: "Backend Developer",
-      period: "Apr 2021 — Jul 2023",
+      period: "Jul 2021 — Jul 2023",
       stack: "Node.js, Express, MongoDB, Redis, RabbitMQ, Stripe, Socket.IO",
       bullets: [
         "Built backend services for a cross-platform tournament app covering team registration, Stripe payments, automated match scheduling and live scores.",
+      ],
+    },
+  ],
+  /** Own work, kept apart from the Artoon client projects. */
+  sideProjects: [
+    {
+      name: "AI Library",
+      kind: "Self-updating directory of AI Skills and MCP servers",
+      period: "Jul 2026 — Present",
+      stack: "Next.js 16, TypeScript, Tailwind v4, GitHub Actions",
+      links: ["mcp-skills-hub.vercel.app", "github.com/neeelbhavsar/mcp-skills-hub"],
+      bullets: [
+        "Built a catalogue of MCP servers, Skills and repos from the MCP Registry, Glama and GitHub Search, with copy-paste setup for Claude, Cursor, Codex, Windsurf, Cline and VS Code, refreshed daily by a GitHub Actions cron with no backend.",
       ],
     },
   ],
@@ -1080,7 +1360,9 @@ export const navItems = [
   { label: "About", href: "#about" },
   { label: "Experience", href: "#experience" },
   { label: "Work", href: "#work" },
-  { label: "Services", href: "#services" },
+  // Same words as the section's own heading (services.heading), so the link
+  // lands where it says it will.
+  { label: "What I do", href: "#services" },
   { label: "AI", href: "#ai" },
   { label: "Skills", href: "#skills" },
   { label: "Feedback", href: "#feedback" },
