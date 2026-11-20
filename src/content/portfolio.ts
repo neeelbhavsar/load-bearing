@@ -238,6 +238,12 @@ export const experience = {
 export type Project = {
   slug: string;
   title: string;
+  /**
+   * Short plain-words description of what the product is ("Logistics ERP").
+   * Used in the case-study <title>, breadcrumbs and every internal link to the
+   * page, so the anchor text tells Google what it will find there.
+   */
+  category: string;
   blurb: string;
   /**
    * Hand-written search description, ≤ 155 characters. Only needed where the
@@ -320,9 +326,17 @@ export const engagementLabel: Record<Project["engagement"], string> = {
   personal: "Personal project",
 };
 
+/**
+ * Last real content change, ISO date. Feeds the sitemap's <lastmod>, which
+ * Google uses to decide what to crawl next — and trusts only while it stays
+ * accurate. Bump it when page content actually changes, not on every deploy.
+ */
+export const contentUpdated = "2026-11-21";
+
 export const projects: readonly Project[] = [
   {
     slug: "ai-library",
+    category: "AI tooling directory",
     title: "AI Library",
     seoDescription:
       "A self-updating directory of AI Skills, MCP servers and GitHub repos, with copy-paste setup for Claude, Cursor, Codex and more, refreshed daily by a cron.",
@@ -396,6 +410,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "asl-erp",
+    category: "Logistics ERP",
     title: "ASL ERP",
     seoDescription:
       "A 520-screen logistics and freight forwarding ERP: air and sea shipments, transport, billing and approvals. React and NestJS, with RBAC and Gujarati localization.",
@@ -484,6 +499,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "braganza",
+    category: "Car rental platform",
     title: "Braganza",
     seoDescription:
       "A full-stack car rental platform: discover, book and rent vehicles, with availability, pricing and fleet state kept consistent under load.",
@@ -574,6 +590,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "streamerdap",
+    category: "Live streaming platform",
     title: "Streamerdap",
     blurb:
       "A web-based live streaming platform that lets creators go live straight from the OBS Browser source, with PayPal-backed subscriptions and plan-gated features.",
@@ -647,6 +664,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "jolt",
+    category: "Film streaming CMS",
     title: "Jolt",
     blurb:
       "A dual-purpose platform: a CMS for the team that publishes the catalogue, and a public film-streaming interface for everyone watching it.",
@@ -722,6 +740,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "spingr",
+    category: "Networking platform",
     title: "SpingR",
     blurb:
       "Design, share and manage digital business cards — with graph-based networking in Neo4j so a connection two hops away is a query, not a guess.",
@@ -793,6 +812,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "imentor",
+    category: "EdTech mentorship platform",
     title: "iMentor",
     seoDescription:
       "A CMS-driven education platform with multi-role admin, automated mentor–mentee matching and built-in chat, so pairs never leave the programme.",
@@ -818,6 +838,28 @@ export const projects: readonly Project[] = [
     image:
       "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop",
     href: "https://pilot.imentor.org",
+    ownership: {
+      scope: "Full stack: API, data model, matching engine and all four role interfaces",
+      decisions: [
+        "Made matching a weighted score with the reasoning shown, so coordinators can see why a pair was proposed and override it.",
+        "Declared permissions per resource and enforced them in one middleware layer, instead of scattering role checks through handlers.",
+        "Persisted every chat message before broadcasting it, so history and unread counts rebuild from the database on any device.",
+      ],
+    },
+    architecture: {
+      flow: [
+        { name: "Client", tech: "React · Next.js", note: "Four role dashboards" },
+        { name: "API", tech: "Node.js · Express", note: "Role middleware · matching engine" },
+        { name: "Database", tech: "MongoDB", note: "Cohorts · pairs · messages" },
+      ],
+      aside: [
+        { name: "Realtime", tech: "Socket.io", note: "Chat · live assignment updates" },
+        { name: "Cache", tech: "Redis", note: "Hot reads" },
+        { name: "Hosting", tech: "AWS", note: "Production" },
+      ],
+      caption:
+        "One Express API serves all four roles through a single permission layer. Chat messages are written to MongoDB first, then pushed over Socket.io.",
+    },
     accent: "#FFD75B",
     detail: {
       kicker: "Mentor matching that used to live in a spreadsheet",
@@ -861,6 +903,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "diamond-connect",
+    category: "Baseball tournament app",
     title: "Diamond Connect",
     blurb:
       "A cross-platform app for running baseball tournaments end to end — team registration, Stripe payments, automated scheduling and scores from the field.",
@@ -873,6 +916,29 @@ export const projects: readonly Project[] = [
     image:
       "https://images.unsplash.com/photo-1566577739112-5180d4bf9390?q=80&w=1600&auto=format&fit=crop",
     href: "https://diamondconnect.com",
+    ownership: {
+      scope: "Backend: schema, REST API, scheduling engine and Stripe payments",
+      decisions: [
+        "Built the scheduler to report genuine conflicts instead of silently producing an impossible schedule.",
+        "Registered a team only on Stripe's webhook confirmation, handled idempotently so retries never create duplicates.",
+        "Served every platform from one API, with field score updates reconciled when a dropped connection returns.",
+      ],
+    },
+    architecture: {
+      flow: [
+        { name: "Client", tech: "Cross-platform app", note: "Teams · scorekeepers" },
+        { name: "API", tech: "Node.js · Express", note: "Scheduling engine" },
+        { name: "Database", tech: "MongoDB", note: "Tournaments · fixtures" },
+      ],
+      aside: [
+        { name: "Payments", tech: "Stripe", note: "Webhook-confirmed enrolment" },
+        { name: "Realtime", tech: "Socket.io", note: "Live scores" },
+        { name: "Queue", tech: "RabbitMQ", note: "Async jobs" },
+        { name: "Cache", tech: "Redis", note: "Hot reads" },
+      ],
+      caption:
+        "Registration completes only when Stripe confirms payment by webhook. The scheduling engine turns team counts and field availability into fixtures, and scores reach followers over Socket.io.",
+    },
     accent: "#FF7A5B",
     detail: {
       kicker: "Tournament logistics, automated end to end",

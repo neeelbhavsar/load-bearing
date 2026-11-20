@@ -4,6 +4,7 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { Cursor } from "@/components/cursor";
 import { Nav } from "@/components/nav";
+import { SiteFooter } from "@/components/site-footer";
 import { profile, seo } from "@/content/portfolio";
 import { siteUrl } from "@/lib/site-url";
 
@@ -97,6 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Cursor />
         <Nav />
         <main id="main">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );

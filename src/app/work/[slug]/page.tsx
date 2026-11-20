@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
-import { engagementLabel, projects, profile } from "@/content/portfolio";
+import { contentUpdated, engagementLabel, projects, profile } from "@/content/portfolio";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { JsonLd } from "@/components/json-ld";
 import { ArchitectureDiagram } from "@/components/architecture-diagram";
 import { projectGraph } from "@/lib/structured-data";
@@ -12,14 +13,14 @@ import { projectGraph } from "@/lib/structured-data";
  * A case study per project.
  *
  * The detail content already existed — it was only reachable inside a modal on
- * the home page, which meant seven projects' worth of writing collapsed into a
+ * the home page, which meant every project's writing collapsed into a
  * single indexable URL. These routes give each one a real address: its own
  * title, description, share image and CreativeWork schema, all from the same
  * `detail` block the modal renders. The modal stays as the quick look and links
  * through to here.
  *
- * Every param is known at build time, so `dynamicParams = false` prerenders all
- * seven and returns a genuine 404 for anything else rather than attempting a
+ * Every param is known at build time, so `dynamicParams = false` prerenders
+ * every case study and returns a genuine 404 for anything else rather than attempting a
  * render for a slug that cannot exist.
  */
 export const dynamicParams = false;
@@ -75,15 +76,18 @@ export async function generateMetadata({
     // Name plus "case study". The root template appends "— Neel Bhavsar". The
     // kicker is a full sentence, and pulling it in produced titles near 80
     // characters that a search result would cut off mid-phrase. A bare name
-    // ("Jolt — Neel Bhavsar") said nothing about what the page is.
-    title: `${project.title} case study`,
+    // ("Jolt — Neel Bhavsar") said nothing about what the page is, and
+    // "Jolt case study" not much more: the category says what the product is,
+    // which is what someone searching for that kind of work types.
+    title: `${project.title} case study: ${project.category}`,
     description,
     alternates: { canonical: `/work/${project.slug}` },
     openGraph: {
-      title: `${project.title} — ${profile.name}`,
+      title: `${project.title}: ${project.category} — ${profile.name}`,
       description,
       url: `/work/${project.slug}`,
       type: "article",
+      modifiedTime: contentUpdated,
     },
   };
 }
@@ -101,23 +105,21 @@ export default async function ProjectPage({
   // the work in the order it is presented there.
   const index = projects.findIndex((p) => p.slug === project.slug);
   const next = projects[(index + 1) % projects.length];
+  const previous = projects[(index - 1 + projects.length) % projects.length];
+  const others = projects.filter((p) => p.slug !== project.slug);
 
   return (
     <div className="mx-auto max-w-[1100px] px-5 pt-24 pb-20 sm:px-8 sm:pt-32 sm:pb-28">
       <JsonLd data={projectGraph(project)} />
 
-      <Link
-        href="/#work"
-        data-cursor="back"
-        className="group inline-flex min-h-11 items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase transition-colors duration-300 hover:text-accent"
-      >
-        <ArrowLeft
-          size={14}
-          aria-hidden
-          className="transition-transform duration-300 group-hover:-translate-x-0.5"
-        />
-        All work
-      </Link>
+      {/* Same trail as the BreadcrumbList in the JSON-LD. */}
+      <Breadcrumbs
+        items={[
+          { name: profile.name, href: "/" },
+          { name: "Case studies", href: "/work" },
+          { name: project.title },
+        ]}
+      />
 
       {/* ── masthead ── */}
       <header className="mt-8 sm:mt-10">
@@ -130,6 +132,7 @@ export default async function ProjectPage({
         <h1 className="mt-4 font-display text-[clamp(2.5rem,8vw,5rem)] leading-[0.95] tracking-[-0.035em]">
           {project.title}
         </h1>
+        <p className="mt-3 text-lg text-fg-muted sm:text-xl">{project.category} case study</p>
 
         <dl className="mt-7 flex flex-wrap gap-x-8 gap-y-3 border-y border-border py-5 font-mono text-[11px] tracking-wide">
           <div className="flex gap-2">
@@ -326,13 +329,68 @@ export default async function ProjectPage({
         </div>
       </div>
 
+      {/* ── more case studies ──
+          Every case study links to every other one, with the category as
+          part of the link text. Before, each page linked only to the next one,
+          so most case studies had a single internal link pointing at them —
+          too weak a signal for Google to bother crawling. */}
+      <section aria-labelledby="more-work" className="mt-16 border-t border-border pt-10">
+        <div className="flex flex-wrap items-baseline justify-between gap-4">
+          <h2
+            id="more-work"
+            className="font-mono text-[11px] tracking-[0.28em] text-fg-faint uppercase"
+          >
+            More case studies
+          </h2>
+          <Link
+            href="/work"
+            className="inline-flex min-h-11 items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase transition-colors duration-300 hover:text-accent"
+          >
+            All case studies
+            <ArrowUpRight size={13} aria-hidden />
+          </Link>
+        </div>
+        <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {others.map((p) => (
+            <li key={p.slug}>
+              <Link
+                href={`/work/${p.slug}`}
+                className="group flex h-full flex-col rounded-2xl border border-border bg-bg-elev px-4 py-3.5 transition-colors duration-300 hover:border-border-strong"
+              >
+                <span className="font-display text-xl tracking-tight group-hover:text-accent">
+                  {p.title}
+                </span>
+                <span className="mt-0.5 text-sm text-fg-muted">{p.category}</span>
+                <span className="mt-2 font-mono text-[10px] tracking-[0.14em] text-fg-faint uppercase">
+                  {p.period}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       {/* ── foot ── */}
       <nav
-        aria-label="More work"
-        className="mt-16 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between"
+        aria-label="Case study navigation"
+        className="mt-12 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
       >
         <Link
+          href={`/work/${previous.slug}`}
+          rel="prev"
+          className="group inline-flex items-center gap-3 font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase transition-colors duration-300 hover:text-accent"
+        >
+          <ArrowLeft
+            size={14}
+            aria-hidden
+            className="transition-transform duration-300 group-hover:-translate-x-0.5"
+          />
+          Previous
+          <span className="font-display text-xl tracking-tight normal-case">{previous.title}</span>
+        </Link>
+        <Link
           href={`/work/${next.slug}`}
+          rel="next"
           data-cursor="next"
           className="group inline-flex items-center gap-3 font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase transition-colors duration-300 hover:text-accent"
         >

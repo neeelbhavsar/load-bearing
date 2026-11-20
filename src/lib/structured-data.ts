@@ -1,4 +1,12 @@
-import { profile, seo, resume, skills, projects, type Project } from "@/content/portfolio";
+import {
+  contentUpdated,
+  profile,
+  seo,
+  resume,
+  skills,
+  projects,
+  type Project,
+} from "@/content/portfolio";
 import { siteUrl } from "@/lib/site-url";
 
 /**
@@ -105,7 +113,7 @@ export function homeGraph() {
         // ProfilePage meaningful rather than just another WebPage.
         mainEntity: { "@id": id.person },
         // The work, in the order the page shows it. This is what ties the home
-        // page to the seven case studies in structured data rather than leaving
+        // page to the case studies in structured data rather than leaving
         // them to be discovered only through the sitemap.
         hasPart: projects.map((project) => ({
           "@type": "CreativeWork",
@@ -167,8 +175,8 @@ export function resumeGraph() {
 
 /**
  * A case study page. The project is a CreativeWork the same Person authored, so
- * these pages feed the one entity rather than floating free — seven more pages
- * all pointing at the same @id is a stronger signal than seven unrelated ones.
+ * these pages feed the one entity rather than floating free — every case study
+ * pointing at the same @id is a stronger signal than unrelated pages.
  *
  * `about` carries the stack as plain keywords, which is what makes a long-tail
  * query like "Neo4j graph relationship discovery Node" reachable at all.
@@ -183,8 +191,11 @@ export function projectGraph(project: Project) {
     "@graph": [
       {
         "@type": "WebPage",
+        "@id": `${url}#page`,
         url,
         name: `${project.title} — ${project.detail.kicker}`,
+        dateModified: contentUpdated,
+        mainEntity: { "@id": `${url}#work` },
         description: project.blurb,
         isPartOf: { "@id": id.website },
         breadcrumb: { "@id": `${url}#breadcrumb` },
@@ -199,12 +210,12 @@ export function projectGraph(project: Project) {
         "@type": "BreadcrumbList",
         "@id": `${url}#breadcrumb`,
         itemListElement: [
-          // No "Work" crumb: there is no /work page, and a crumb pointing at
-          // the /#work fragment is just the home page again.
           { "@type": "ListItem", position: 1, name: profile.name, item: base },
+          // /work is a real hub page now, so the trail runs through it.
+          { "@type": "ListItem", position: 2, name: "Case studies", item: `${base}/work` },
           // The last crumb is the current page, so it carries no `item` — that
           // is the convention, and adding one makes it self-referential.
-          { "@type": "ListItem", position: 2, name: project.title },
+          { "@type": "ListItem", position: 3, name: project.title },
         ],
       },
       {
@@ -219,13 +230,60 @@ export function projectGraph(project: Project) {
         // The generated share card, not project.image — that is Unsplash stock,
         // and schema shouldn't present a stock photo as the work itself.
         image: `${url}/opengraph-image`,
-        // The year is a plain string like "2026" or "2021 — 2023"; only emit a
-        // machine date when it is unambiguously a single year.
         ...(/^\d{4}$/.test(project.year) ? { dateCreated: project.year } : {}),
+        dateModified: contentUpdated,
+        genre: project.category,
         author: { "@id": id.person },
         creator: { "@id": id.person },
         keywords: project.stack.join(", "),
         ...(project.href ? { sameAs: project.href } : {}),
+      },
+    ],
+  };
+}
+
+/**
+ * /work hub. A CollectionPage whose ItemList names every case study in page
+ * order, so the hub and its children are explicitly connected in the data as
+ * well as by links.
+ */
+export function workIndexGraph() {
+  const base = siteUrl();
+  const id = ids(base);
+  const url = `${base}/work`;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${url}#page`,
+        url,
+        name: `Case studies — ${profile.name}`,
+        isPartOf: { "@id": id.website },
+        about: { "@id": id.person },
+        dateModified: contentUpdated,
+        breadcrumb: { "@id": `${url}#breadcrumb` },
+        mainEntity: { "@id": `${url}#list` },
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${url}#list`,
+        numberOfItems: projects.length,
+        itemListElement: projects.map((project, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: `${project.title}: ${project.category}`,
+          url: `${base}/work/${project.slug}`,
+        })),
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: profile.name, item: base },
+          { "@type": "ListItem", position: 2, name: "Case studies" },
+        ],
       },
     ],
   };

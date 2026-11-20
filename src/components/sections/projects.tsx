@@ -72,14 +72,24 @@ export function Projects() {
             <p className="font-display text-xl leading-tight tracking-tight sm:text-3xl">
               More in the repos —<span className="text-fg-muted italic"> and a few under NDA.</span>
             </p>
-            <a
-              href="#contact"
-              data-cursor="talk"
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-accent px-6 py-4 font-mono text-[11px] tracking-[0.2em] text-on-accent uppercase transition-transform duration-300 hover:-translate-y-0.5 sm:w-fit sm:py-3.5"
-            >
-              Ask me about them
-              <ArrowUpRight size={14} aria-hidden />
-            </a>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              {/* The hub page: every case study as a plain list, which is the
+                  path crawlers take when they skip the animated gallery. */}
+              <Link
+                href="/work"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-border-strong px-6 py-4 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent sm:w-fit sm:py-3.5"
+              >
+                All case studies
+              </Link>
+              <a
+                href="#contact"
+                data-cursor="talk"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-accent px-6 py-4 font-mono text-[11px] tracking-[0.2em] text-on-accent uppercase transition-transform duration-300 hover:-translate-y-0.5 sm:w-fit sm:py-3.5"
+              >
+                Ask me about them
+                <ArrowUpRight size={14} aria-hidden />
+              </a>
+            </div>
           </div>
         </Reveal>
       </div>

@@ -26,7 +26,7 @@ export function Contact() {
   };
 
   return (
-    <footer id="contact" ref={ref} className="relative overflow-hidden border-t border-border">
+    <section id="contact" ref={ref} className="relative overflow-hidden border-t border-border">
       <div className="relative z-10 mx-auto max-w-[1400px] px-5 pt-20 pb-12 sm:px-8 sm:pt-36 sm:pb-14">
         <SectionLabel index="08">Contact</SectionLabel>
 
@@ -152,6 +152,6 @@ export function Contact() {
           <span className="text-accent">.</span>
         </p>
       </div>
-    </footer>
+    </section>
   );
 }
