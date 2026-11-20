@@ -85,7 +85,11 @@ export function homeGraph() {
         "@type": "WebSite",
         "@id": id.website,
         url: base,
-        name: `${profile.name} — ${seo.jobTitle}`,
+        // Google's site name (the label above the result) comes from here and
+        // must be a short brand name, not a title. "Name — Job title" reads as
+        // a headline, so Google fell back to the host and showed "Vercel".
+        name: profile.name,
+        alternateName: [`${profile.name} — ${seo.jobTitle}`, "NB"],
         description: seo.description,
         inLanguage: "en",
         publisher: { "@id": id.person },
