@@ -97,17 +97,32 @@ function TimelineItem({
   const dotScale = useTransform(activeIndex, [index - 0.6, index, index + 0.6], [1, 1.9, 1], {
     clamp: true,
   });
+  const milestone = "milestone" in item ? item.milestone : undefined;
 
   return (
     <li className="relative">
       <motion.span
         aria-hidden
-        className="absolute top-2.5 -left-6 h-2 w-2 rounded-full bg-accent sm:-left-12"
+        className={
+          "absolute top-2.5 -left-6 h-2 w-2 rounded-full bg-accent sm:-left-12 " +
+          (milestone ? "ring-4 ring-accent/25" : "")
+        }
         style={{ scale: dotScale, translateX: "-50%", marginLeft: "0.5px" }}
       />
-      <Reveal>
+      <Reveal
+        className={
+          milestone
+            ? "-mx-4 rounded-2xl border border-accent/40 bg-accent/[0.04] px-4 py-5 sm:-mx-6 sm:px-6 sm:py-6"
+            : undefined
+        }
+      >
+        {milestone && (
+          <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1 font-mono text-[11px] tracking-[0.2em] text-on-accent uppercase">
+            {milestone} · {item.year}
+          </p>
+        )}
         <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <span className="font-mono text-sm text-accent">{item.year}</span>
+          <span className="font-mono text-sm text-accent">{item.year}</span>{" "}
           <h3 className="font-display text-[1.6rem] leading-tight tracking-tight sm:text-3xl">
             {item.title}
           </h3>

@@ -178,13 +178,18 @@ function Word({
   range: [number, number];
 }) {
   const opacity = useTransform(progress, range, [0.18, 1]);
+  // Same pattern as About: the faint backdrop is drawn by ::before from
+  // data-word, because a duplicate aria-hidden span is still read by crawlers
+  // ("IfIf there there was"), and the gap is a real space, not a margin.
   return (
-    <span className="relative mr-[0.26em] inline-block">
-      <span aria-hidden className="absolute inset-0 opacity-15">
-        {children}
-      </span>
-      <motion.span style={{ opacity }}>{children}</motion.span>
-    </span>
+    <>
+      <span
+        data-word={children}
+        className="relative inline-block before:absolute before:inset-0 before:opacity-15 before:content-[attr(data-word)]"
+      >
+        <motion.span style={{ opacity }}>{children}</motion.span>
+      </span>{" "}
+    </>
   );
 }
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Download, Mail, MapPin, Phone } from "lucide-react";
 import { profile, projects, resume, seo } from "@/content/portfolio";
 import { JsonLd } from "@/components/json-ld";
 import { resumeGraph } from "@/lib/structured-data";
@@ -36,7 +36,8 @@ export const metadata: Metadata = {
  * rather than being handed a file.
  *
  * A print stylesheet in globals.css flattens it to ink-on-paper if anyone hits
- * Ctrl+P — no separate PDF to keep in sync.
+ * Ctrl+P. The downloadable, ATS-friendly PDF (/resume.pdf) is generated from
+ * the same `resume` object, so there is still only one copy to keep current.
  */
 export default function ResumePage() {
   const { contact } = resume;
@@ -124,7 +125,22 @@ export default function ResumePage() {
               </a>
             </li>
           </ul>
+
+          {/* Availability, stated where a recruiter looks first. */}
+          <p className="mt-4 inline-flex items-start gap-2 rounded-2xl border border-accent/50 bg-accent/[0.06] px-3.5 py-1.5 font-mono text-[11px] leading-relaxed tracking-wide text-fg sm:items-center sm:rounded-full">
+            <span aria-hidden className="mt-[0.55em] size-1.5 shrink-0 rounded-full bg-accent sm:mt-0" />
+            {resume.availability}
+          </p>
         </div>
+
+        <a
+          href={profile.resumePdfUrl}
+          download={profile.resumePdfName}
+          className="inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-full bg-accent px-6 py-3.5 font-mono text-[11px] tracking-[0.2em] text-on-accent uppercase transition-transform duration-300 hover:-translate-y-0.5 sm:self-end print:hidden"
+        >
+          Download PDF
+          <Download size={14} aria-hidden />
+        </a>
       </header>
 
       {/* ── summary ── */}
@@ -153,7 +169,18 @@ export default function ResumePage() {
                   <span className="font-mono text-[11px] tracking-[0.16em] text-fg-faint uppercase">
                     Career progression:{" "}
                   </span>
-                  {job.progression.map((step) => `${step.title} (${step.year})`).join(" → ")}
+                  {job.progression.map((step, i) => (
+                    <span key={step.title}>
+                      {i > 0 && " → "}
+                      {"promoted" in step && step.promoted ? (
+                        <strong className="font-medium text-accent">
+                          Promoted to {step.title} ({step.year})
+                        </strong>
+                      ) : (
+                        `${step.title} (${step.year})`
+                      )}
+                    </span>
+                  ))}
                 </p>
                 <Bullets items={job.bullets} />
               </article>
@@ -161,6 +188,9 @@ export default function ResumePage() {
           </Section>
 
           <Section label="Selected projects">
+            <p className="-mt-2 mb-6 font-mono text-[11px] tracking-[0.16em] text-fg-faint uppercase">
+              {resume.projectsNote}
+            </p>
             {resume.projects.map((project) => {
               // Résumé names can be longer than the case-study title
               // ("Braganza Auto Collezione"), so match on the prefix.
@@ -193,6 +223,53 @@ export default function ResumePage() {
                 </p>
                 <Bullets items={project.bullets} />
               </article>
+              );
+            })}
+          </Section>
+
+          <Section label="Personal project">
+            {resume.sideProjects.map((project) => {
+              const caseStudy = projects.find((p) => p.title === project.name);
+              return (
+                <article key={project.name}>
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <h3 className="font-display text-xl tracking-tight sm:text-2xl">
+                      {caseStudy ? (
+                        <Link
+                          href={`/work/${caseStudy.slug}`}
+                          className="underline decoration-border-strong underline-offset-4 transition-colors duration-300 hover:text-accent print:no-underline"
+                        >
+                          {project.name}
+                        </Link>
+                      ) : (
+                        project.name
+                      )}
+                      <span className="text-fg-muted italic"> — {project.kind}</span>
+                    </h3>
+                    <p className="font-mono text-[11px] tracking-[0.16em] text-fg-faint uppercase">
+                      {project.period}
+                    </p>
+                  </div>
+                  <p className="mt-2 font-mono text-[11px] leading-relaxed tracking-wide text-fg-faint">
+                    <span className="uppercase">Stack:</span> {project.stack}
+                  </p>
+                  <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px] tracking-wide">
+                    {project.links.map((link) => (
+                      <li key={link}>
+                        <a
+                          href={`https://${link}`}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="inline-flex items-center gap-1.5 text-accent hover:underline"
+                        >
+                          {link}
+                          <ArrowUpRight size={12} aria-hidden />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  <Bullets items={project.bullets} />
+                </article>
               );
             })}
           </Section>
@@ -254,7 +331,7 @@ export default function ResumePage() {
       {/* ── foot ── */}
       <div className="mt-16 flex flex-col gap-4 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between print:hidden">
         <p className="font-mono text-[11px] tracking-[0.18em] text-fg-faint uppercase">
-          Updated {resume.experience[0].period.split("—")[0].trim()} onward · Ahmedabad, India
+          Last updated {resume.updated} · Ahmedabad, India
         </p>
         <div className="flex flex-wrap gap-3">
           <a
@@ -262,8 +339,16 @@ export default function ResumePage() {
             data-cursor="email"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 font-mono text-[11px] tracking-[0.2em] text-on-accent uppercase transition-transform duration-300 hover:-translate-y-0.5"
           >
-            Get in touch
+            Hire me
             <ArrowUpRight size={14} aria-hidden />
+          </a>
+          <a
+            href={profile.resumePdfUrl}
+            download={profile.resumePdfName}
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-border-strong px-6 py-3.5 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent"
+          >
+            Download PDF
+            <Download size={14} aria-hidden />
           </a>
           <Link
             href="/#work"

@@ -12,9 +12,9 @@ import {
   useTransform,
   type MotionValue,
 } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowUpRight, Sparkles, X } from "lucide-react";
-import { projects, type Project } from "@/content/portfolio";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { ArrowDown, ArrowUpRight, CodeXml, Sparkles, X } from "lucide-react";
+import { engagementLabel, projects, type Project } from "@/content/portfolio";
 import { Reveal, RevealText, SectionLabel } from "@/components/motion-primitives";
 import { useScrollLock } from "@/lib/scroll-lock";
 
@@ -51,8 +51,7 @@ export function Projects() {
           </div>
           <Reveal className="max-w-xs">
             <p className="text-sm leading-relaxed text-fg-muted">
-              Seven production systems — the platforms behind them, what broke, and how it was
-              fixed.{" "}
+              {workCount()}. The platforms behind them, what broke, and how it was fixed.{" "}
               <span className="text-fg">
                 {reduced ? "Open any card" : "Keep scrolling"} for the full case study.
               </span>
@@ -90,14 +89,52 @@ export function Projects() {
   );
 }
 
-/** Thin marquee band of project names. Decoration, not navigation. */
+const NUMBER_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
+
+/**
+ * "Eight production systems — seven for clients at Artoon, one of my own",
+ * counted from the data so the sentence can't fall out of step with the cards
+ * again (it said "Seven" over a list of eight).
+ */
+function workCount() {
+  const word = (n: number) => NUMBER_WORDS[n] ?? String(n);
+  const client = projects.filter((p) => p.engagement === "artoon-client").length;
+  const own = projects.length - client;
+  const total = `${word(projects.length)} production systems`;
+  if (own === 0) return `${total}, delivered for clients at Artoon Solutions`;
+  return `${total}: ${word(client).toLowerCase()} delivered for clients at Artoon Solutions, ${word(own).toLowerCase()} of my own`;
+}
+
+/** Client-only flag without a setState-in-effect. */
+const noopSubscribe = () => () => {};
+function useHydrated() {
+  return useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  );
+}
+
+/**
+ * Thin marquee band of project names. Decoration, not navigation.
+ *
+ * Rendered only after hydration: in the server HTML the repeated names were
+ * the first thing a crawler or text extractor saw in this section, as the same
+ * eight titles over and over. The band has a fixed height so mounting it late
+ * shifts nothing.
+ */
 function TitleTicker() {
+  const hydrated = useHydrated();
+  // Two copies of the strip, each holding every title twice, so one copy is
+  // always wider than the viewport and the -50% loop never shows a gap.
   const strip = [...projects, ...projects];
   return (
     <div
       aria-hidden
-      className="marquee-host relative mt-10 overflow-hidden border-y border-border py-3 sm:mt-14 sm:py-4"
+      data-nosnippet
+      className="marquee-host relative mt-10 flex h-[52px] items-center overflow-hidden border-y border-border sm:mt-14 sm:h-16"
     >
+      {hydrated && (
       <div className="marquee-track flex w-max" style={{ ["--marquee-duration" as string]: "52s" }}>
         {[0, 1].map((copy) => (
           <div key={copy} className="flex shrink-0 items-center">
@@ -115,6 +152,7 @@ function TitleTicker() {
           </div>
         ))}
       </div>
+      )}
       <span className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-bg to-transparent sm:w-32" />
       <span className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-bg to-transparent sm:w-32" />
     </div>
@@ -187,9 +225,12 @@ function HorizontalGallery({ onOpen }: { onOpen: (p: Project) => void }) {
         {/* progress rail + counter, in flow under the cards */}
         <div className="shrink-0 px-5 sm:px-8">
           <div className="mx-auto flex max-w-[1400px] items-center gap-4 sm:gap-6">
-            <span className="font-mono text-[11px] tracking-[0.2em] text-fg tabular-nums">
-              {String(index + 1).padStart(2, "0")}
-            </span>
+            {/* Counter digits are drawn from data attributes: as text they ran
+                into the "Scroll" label and read as "08Scroll". */}
+            <Decor
+              text={String(index + 1).padStart(2, "0")}
+              className="font-mono text-[11px] tracking-[0.2em] text-fg tabular-nums"
+            />
             <div className="relative h-px flex-1 bg-border-strong">
               <motion.span
                 aria-hidden
@@ -197,12 +238,16 @@ function HorizontalGallery({ onOpen }: { onOpen: (p: Project) => void }) {
                 style={{ scaleX: scrollYProgress }}
               />
             </div>
-            <span className="font-mono text-[11px] tracking-[0.2em] text-fg-faint tabular-nums">
-              {String(projects.length).padStart(2, "0")}
-            </span>
-            <span className="hidden items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase sm:flex">
+            <Decor
+              text={String(projects.length).padStart(2, "0")}
+              className="font-mono text-[11px] tracking-[0.2em] text-fg-faint tabular-nums"
+            />
+            <span
+              aria-hidden
+              className="hidden items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase sm:flex"
+            >
               <ArrowDown size={12} aria-hidden className="animate-bounce" />
-              Scroll
+              <Decor text="Scroll" />
             </span>
           </div>
         </div>
@@ -272,9 +317,9 @@ function GalleryCard({
           className="absolute inset-0 bg-gradient-to-t from-bg-elev via-bg-elev/30 to-transparent"
         />
 
-        <span className="absolute top-4 left-4 z-10 rounded-full border border-border-strong bg-bg/70 px-2.5 py-1 font-mono text-[11px] tracking-[0.18em] uppercase backdrop-blur sm:top-5 sm:left-5 sm:px-3 sm:tracking-[0.2em]">
-          {project.year}
-        </span>
+        <span className="absolute top-4 left-4 z-10 rounded-full border border-border-strong bg-bg/70 px-2.5 py-1 font-mono text-[11px] tracking-[0.14em] uppercase backdrop-blur sm:top-5 sm:left-5 sm:px-3 sm:tracking-[0.16em]">
+          {project.period}
+        </span>{" "}
         {project.ai && (
           <span
             className="absolute top-4 right-4 z-10 inline-flex items-center gap-1.5 rounded-full border bg-bg/60 px-2.5 py-1 font-mono text-[11px] tracking-[0.16em] uppercase backdrop-blur sm:top-5 sm:right-5"
@@ -286,51 +331,52 @@ function GalleryCard({
         )}
 
         {/* Oversized index, sunk into the foot of the frame — fully inside it
-            now, since a number cropped by the card edge just looks broken. */}
-        <span
-          aria-hidden
+            now, since a number cropped by the card edge just looks broken.
+            Drawn from a data attribute: as text it ran into the year and read
+            "202602". */}
+        <Decor
+          text={String(index + 1).padStart(2, "0")}
           className="absolute right-4 bottom-1 z-10 font-display text-[4rem] leading-none tracking-tighter text-fg/[0.09] select-none sm:text-[5.5rem]"
-        >
-          {String(index + 1).padStart(2, "0")}
-        </span>
+        />
       </div>
 
       {/* flex-1 + mt-auto footer: blurbs differ in length, so the cards stretch
           to a common height and their footers still line up across the track. */}
       <div className="relative z-10 flex flex-1 flex-col p-4 sm:p-6">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-display text-2xl leading-tight tracking-tight sm:text-[1.75rem]">
+          <h3 className="shrink-0 font-display text-2xl leading-tight tracking-tight whitespace-nowrap sm:text-[1.75rem]">
             {project.title}
           </h3>
+          {/* Wraps instead of holding its width: as shrink-0 the longer metrics
+              ran off the card edge and squeezed the title onto two lines. */}
           {project.metric && (
             <span
-              className="mt-1.5 shrink-0 text-right font-mono text-[11px] leading-tight tracking-[0.14em] uppercase"
+              className="mt-1.5 min-w-0 text-right font-mono text-[11px] leading-snug tracking-[0.12em] text-balance uppercase"
               style={{ color: project.accent }}
             >
               {project.metric}
             </span>
           )}
         </div>
-        <p className="mt-2 line-clamp-2 text-[13px] leading-relaxed text-fg-muted sm:mt-2.5 sm:line-clamp-3 sm:text-sm">
+        <p className="mt-1 font-mono text-[10px] tracking-[0.14em] text-fg-faint uppercase sm:text-[11px]">
+          {engagementLabel[project.engagement]}
+        </p>
+        <p className="mt-2 line-clamp-2 text-[13px] leading-relaxed text-fg-muted sm:mt-2.5 sm:text-sm">
           {project.blurb}
         </p>
 
-        {/* Three chips, not four: a fourth wraps to a second row at 86vw and
-            eats the height the image needs. */}
-        <ul className="mt-3 mb-4 flex flex-wrap gap-1.5 sm:mt-4 sm:gap-2">
-          {project.stack.slice(0, 3).map((s) => (
+        {/* The whole stack, not three chips and a "+5": the hidden ones were
+            the keywords recruiters scan for. Chips are tighter to compensate,
+            and the blurb gives up a line on larger screens. */}
+        <ul className="mt-3 mb-4 flex flex-wrap gap-1 sm:mt-3.5 sm:gap-1.5">
+          {project.stack.map((s) => (
             <li
               key={s}
-              className="rounded-full border border-border px-2.5 py-1 font-mono text-[11px] tracking-wide text-fg-faint"
+              className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] tracking-wide text-fg-muted sm:text-[11px]"
             >
               {s}
             </li>
           ))}
-          {project.stack.length > 3 && (
-            <li className="rounded-full border border-border px-2.5 py-1 font-mono text-[11px] tracking-wide text-fg-faint">
-              +{project.stack.length - 3}
-            </li>
-          )}
         </ul>
 
         <div className="mt-auto flex items-center justify-between gap-3 border-t border-border pt-3.5 sm:pt-4">
@@ -387,14 +433,18 @@ function ReducedGrid({ onOpen }: { onOpen: (p: Project) => void }) {
               aria-hidden
               className="absolute inset-0 bg-gradient-to-t from-bg-elev via-bg-elev/30 to-transparent"
             />
-            <span className="absolute top-5 left-5 rounded-full border border-border-strong bg-bg/70 px-3 py-1 font-mono text-[11px] tracking-[0.2em] uppercase">
-              {String(i + 1).padStart(2, "0")} / {project.year}
+            <span className="absolute top-5 left-5 rounded-full border border-border-strong bg-bg/70 px-3 py-1 font-mono text-[11px] tracking-[0.16em] uppercase">
+              <Decor text={`${String(i + 1).padStart(2, "0")} / `} />
+              {project.period}
             </span>
           </div>
           <div className="flex flex-1 flex-col p-5 sm:p-7">
             <h3 className="font-display text-[1.75rem] leading-tight tracking-tight sm:text-4xl">
               {project.title}
             </h3>
+            <p className="mt-1.5 font-mono text-[11px] tracking-[0.14em] text-fg-faint uppercase">
+              {engagementLabel[project.engagement]}
+            </p>
             <p className="mt-3 text-sm leading-relaxed text-fg-muted">{project.blurb}</p>
             <ul className="mt-5 flex flex-wrap gap-2">
               {project.stack.map((s) => (
@@ -516,7 +566,7 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
                 </div>
                 <div className="px-5 pt-5 sm:absolute sm:inset-x-0 sm:bottom-0 sm:px-10 sm:pt-0 sm:pb-10">
                   <p className="font-mono text-[11px] tracking-[0.2em] text-fg-faint uppercase">
-                    {project.year} · {project.role}
+                    {project.period} · {project.role}
                   </p>
                   <h3 className="mt-2.5 font-display text-[clamp(1.85rem,7vw,3.5rem)] leading-[1.05] tracking-[-0.03em] sm:leading-none">
                     {project.title}
@@ -526,6 +576,9 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
                     style={{ color: project.accent }}
                   >
                     {project.detail.kicker}
+                  </p>
+                  <p className="mt-2 font-mono text-[11px] tracking-[0.16em] text-fg-faint uppercase">
+                    {engagementLabel[project.engagement]}
                   </p>
                 </div>
               </div>
@@ -624,6 +677,17 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
                       <ArrowUpRight size={14} aria-hidden />
                     </a>
                   )}
+                  {project.repo && (
+                    <a
+                      href={project.repo}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-border-strong px-6 py-4 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent sm:py-3.5"
+                    >
+                      Source on GitHub
+                      <CodeXml size={14} aria-hidden />
+                    </a>
+                  )}
                   {!project.href && project.linkNote && (
                     <span className="text-center font-mono text-[11px] tracking-[0.16em] text-fg-faint uppercase sm:text-left">
                       {project.linkNote}
@@ -661,6 +725,22 @@ function ProjectModal({ project, onClose }: { project: Project | null; onClose: 
         </motion.div>
       )}
     </AnimatePresence>
+  );
+}
+
+/**
+ * Purely visual text — card indexes, counters. Drawn by ::before from a data
+ * attribute so it is painted but never part of the document text: as real text
+ * it fused with its neighbours for crawlers and copy-paste ("202602",
+ * "08Scroll").
+ */
+function Decor({ text, className }: { text: string; className?: string }) {
+  return (
+    <span
+      aria-hidden
+      data-decor={text}
+      className={`before:content-[attr(data-decor)] ${className ?? ""}`}
+    />
   );
 }
 
