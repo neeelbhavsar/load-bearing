@@ -351,7 +351,7 @@ export default function ResumePage() {
             <Download size={14} aria-hidden />
           </a>
           <Link
-            href="/#work"
+            href="/work"
             className="inline-flex items-center justify-center gap-2 rounded-full border border-border-strong px-6 py-3.5 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors duration-300 hover:border-accent hover:text-accent"
           >
             See the work
